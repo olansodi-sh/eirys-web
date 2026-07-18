@@ -16,6 +16,14 @@ Frontend del sistema POS **Eirys**. React 19 + TypeScript + Vite + TailwindCSS.
 - **Listas de precios**: gestión y edición de precios por variante.
 - **Ventas**: historial de facturas con estado.
 
+## Fase 3 — implementado (complementos de venta)
+
+- **Cotizaciones**: creación con líneas y conversión a factura.
+- **Vales**: emisión y redención con saldo.
+- **Notas crédito**: sobre factura, con restock y generación de vale.
+- **Recurrentes**: plantillas y ejecución de las vencidas.
+- **Despacho**: entradas/salidas a demanda con estado.
+
 ## Requisitos
 
 Necesita la **API** (`eirys-api`) corriendo en `http://localhost:3000`.

@@ -7,6 +7,11 @@ import PosPage from '@/pages/PosPage'
 import SalesPage from '@/pages/SalesPage'
 import CashPage from '@/pages/CashPage'
 import PriceListsPage from '@/pages/PriceListsPage'
+import QuotesPage from '@/pages/QuotesPage'
+import VouchersPage from '@/pages/VouchersPage'
+import CreditNotesPage from '@/pages/CreditNotesPage'
+import RecurringPage from '@/pages/RecurringPage'
+import DispatchPage from '@/pages/DispatchPage'
 import ProductsPage from '@/pages/ProductsPage'
 import CategoriesPage from '@/pages/CategoriesPage'
 import WarehousesPage from '@/pages/WarehousesPage'
@@ -26,6 +31,11 @@ export const router = createBrowserRouter([
       { index: true, element: <DashboardPage /> },
       { path: 'pos', element: <PosPage /> },
       { path: 'ventas', element: <SalesPage /> },
+      { path: 'cotizaciones', element: <QuotesPage /> },
+      { path: 'vales', element: <VouchersPage /> },
+      { path: 'notas-credito', element: <CreditNotesPage /> },
+      { path: 'recurrentes', element: <RecurringPage /> },
+      { path: 'despacho', element: <DispatchPage /> },
       { path: 'caja', element: <CashPage /> },
       { path: 'listas-precios', element: <PriceListsPage /> },
       { path: 'productos', element: <ProductsPage /> },

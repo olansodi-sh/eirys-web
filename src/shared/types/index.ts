@@ -128,3 +128,61 @@ export interface Sale {
   date: string
   lines: SaleLine[]
 }
+
+export type QuoteStatus =
+  | 'draft'
+  | 'sent'
+  | 'approved'
+  | 'rejected'
+  | 'converted'
+
+export interface Quote {
+  id: string
+  number: string
+  thirdParty?: ThirdParty | null
+  status: QuoteStatus
+  total: string
+  validUntil: string | null
+  saleId: string | null
+  lines: SaleLine[]
+}
+
+export interface Voucher {
+  id: string
+  code: string
+  amount: string
+  balance: string
+  status: 'active' | 'redeemed' | 'expired'
+  reason?: string
+  thirdParty?: ThirdParty | null
+}
+
+export interface CreditNote {
+  id: string
+  number: string
+  saleId: string
+  type: 'partial' | 'total'
+  amount: string
+  reason?: string
+  restock: boolean
+  voucherId: string | null
+}
+
+export interface RecurringInvoice {
+  id: string
+  name: string
+  frequency: 'weekly' | 'monthly'
+  nextRun: string
+  active: boolean
+  warehouseId: string
+}
+
+export interface Dispatch {
+  id: string
+  number: string
+  type: 'in' | 'out'
+  reference?: string
+  status: 'pending' | 'done'
+  notes?: string
+  lines: { variantId: string; description: string; quantity: number }[]
+}

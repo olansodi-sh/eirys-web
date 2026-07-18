@@ -2,14 +2,19 @@ import { api } from './client'
 import type {
   CashSession,
   Category,
+  CreditNote,
+  Dispatch,
   LoginResponse,
   PaymentMethod,
   PriceList,
   Product,
+  Quote,
+  RecurringInvoice,
   Role,
   Sale,
   ThirdParty,
   User,
+  Voucher,
   Warehouse,
 } from '@/shared/types'
 
@@ -140,4 +145,69 @@ export const salesApi = {
   get: (id: string) => api.get<Sale>(`/sales/${id}`).then((r) => r.data),
   create: (dto: SalePayload) =>
     api.post<Sale>('/sales', dto).then((r) => r.data),
+}
+
+export interface QuoteLineInput {
+  variantId: string
+  quantity: number
+  unitPrice: number
+}
+
+export const quotesApi = {
+  list: () => api.get<Quote[]>('/quotes').then((r) => r.data),
+  create: (dto: { thirdPartyId?: string; lines: QuoteLineInput[] }) =>
+    api.post<Quote>('/quotes', dto).then((r) => r.data),
+  convert: (id: string, warehouseId: string) =>
+    api
+      .post<Sale>(`/quotes/${id}/convert`, { warehouseId })
+      .then((r) => r.data),
+}
+
+export const vouchersApi = {
+  list: () => api.get<Voucher[]>('/vouchers').then((r) => r.data),
+  create: (dto: { amount: number; reason?: string; thirdPartyId?: string }) =>
+    api.post<Voucher>('/vouchers', dto).then((r) => r.data),
+  redeem: (code: string, amount: number) =>
+    api.post<Voucher>(`/vouchers/${code}/redeem`, { amount }).then((r) => r.data),
+}
+
+export const creditNotesApi = {
+  list: () => api.get<CreditNote[]>('/credit-notes').then((r) => r.data),
+  create: (dto: {
+    saleId: string
+    type: 'partial' | 'total'
+    amount?: number
+    reason?: string
+    restock?: boolean
+    generateVoucher?: boolean
+  }) => api.post<CreditNote>('/credit-notes', dto).then((r) => r.data),
+}
+
+export const recurringApi = {
+  list: () =>
+    api.get<RecurringInvoice[]>('/recurring').then((r) => r.data),
+  create: (dto: {
+    name: string
+    warehouseId: string
+    thirdPartyId?: string
+    frequency: 'weekly' | 'monthly'
+    nextRun: string
+    lines: QuoteLineInput[]
+  }) => api.post<RecurringInvoice>('/recurring', dto).then((r) => r.data),
+  run: () =>
+    api
+      .post<{ generated: number; numbers: string[] }>('/recurring/run')
+      .then((r) => r.data),
+}
+
+export const dispatchApi = {
+  list: () => api.get<Dispatch[]>('/dispatch').then((r) => r.data),
+  create: (dto: {
+    type: 'in' | 'out'
+    reference?: string
+    notes?: string
+    lines: { variantId: string; description: string; quantity: number }[]
+  }) => api.post<Dispatch>('/dispatch', dto).then((r) => r.data),
+  markDone: (id: string) =>
+    api.patch<Dispatch>(`/dispatch/${id}/done`).then((r) => r.data),
 }
