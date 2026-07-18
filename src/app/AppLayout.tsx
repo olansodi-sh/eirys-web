@@ -23,6 +23,9 @@ const NAV: NavItem[] = [
   { to: '/categorias', label: 'Categorías', permission: 'inventory.read' },
   { to: '/bodegas', label: 'Bodegas', permission: 'inventory.read' },
   { to: '/terceros', label: 'Terceros', permission: 'third_parties.read' },
+  { to: '/reportes', label: 'Reportes', permission: 'reports.read' },
+  { to: '/libro-diario', label: 'Libro diario', permission: 'reports.read' },
+  { to: '/tareas', label: 'Mis tareas', permission: 'tasks.manage' },
   { to: '/usuarios', label: 'Usuarios', permission: 'users.manage' },
 ]
 

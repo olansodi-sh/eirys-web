@@ -28,6 +28,12 @@ Frontend del sistema POS **Eirys**. React 19 + TypeScript + Vite + TailwindCSS.
 
 - **Compras** (pantalla con pestañas): órdenes de compra, facturas/documentos de soporte (recepción que aumenta stock) y notas débito.
 
+## Fase 5 — implementado (contabilidad y análisis)
+
+- **Reportes**: tarjetas del día + tablas de top productos/clientes y costos por producto/bodega.
+- **Libro diario**: ledger por rango de fechas con totales de ingresos/egresos.
+- **Mis tareas**: tablero Kanban con drag & drop entre columnas.
+
 ## Requisitos
 
 Necesita la **API** (`eirys-api`) corriendo en `http://localhost:3000`.

@@ -255,3 +255,41 @@ export const purchasesApi = {
       .post<PurchaseDebitNote>('/purchases/debit-notes', dto)
       .then((r) => r.data),
 }
+
+export const reportsApi = {
+  daily: (date?: string) =>
+    api.get('/reports/daily', { params: { date } }).then((r) => r.data),
+  commercial360: () =>
+    api.get('/reports/commercial-360').then((r) => r.data),
+  costByProduct: () =>
+    api.get('/reports/cost-by-product').then((r) => r.data),
+  costByWarehouse: () =>
+    api.get('/reports/cost-by-warehouse').then((r) => r.data),
+  journal: (from: string, to: string) =>
+    api.get('/reports/journal', { params: { from, to } }).then((r) => r.data),
+}
+
+export interface BoardColumn {
+  id: string
+  name: string
+  order: number
+  tasks: {
+    id: string
+    title: string
+    description?: string
+    columnId: string
+    order: number
+  }[]
+}
+
+export const tasksApi = {
+  board: () => api.get<BoardColumn[]>('/tasks/board').then((r) => r.data),
+  createTask: (dto: {
+    title: string
+    description?: string
+    columnId: string
+  }) => api.post('/tasks', dto).then((r) => r.data),
+  move: (id: string, columnId: string, order: number) =>
+    api.patch(`/tasks/${id}/move`, { columnId, order }).then((r) => r.data),
+  remove: (id: string) => api.delete(`/tasks/${id}`).then((r) => r.data),
+}

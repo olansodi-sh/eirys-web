@@ -13,6 +13,9 @@ import CreditNotesPage from '@/pages/CreditNotesPage'
 import RecurringPage from '@/pages/RecurringPage'
 import DispatchPage from '@/pages/DispatchPage'
 import PurchasesPage from '@/pages/PurchasesPage'
+import ReportsPage from '@/pages/ReportsPage'
+import JournalPage from '@/pages/JournalPage'
+import TasksPage from '@/pages/TasksPage'
 import ProductsPage from '@/pages/ProductsPage'
 import CategoriesPage from '@/pages/CategoriesPage'
 import WarehousesPage from '@/pages/WarehousesPage'
@@ -40,6 +43,9 @@ export const router = createBrowserRouter([
       { path: 'compras', element: <PurchasesPage /> },
       { path: 'caja', element: <CashPage /> },
       { path: 'listas-precios', element: <PriceListsPage /> },
+      { path: 'reportes', element: <ReportsPage /> },
+      { path: 'libro-diario', element: <JournalPage /> },
+      { path: 'tareas', element: <TasksPage /> },
       { path: 'productos', element: <ProductsPage /> },
       { path: 'categorias', element: <CategoriesPage /> },
       { path: 'bodegas', element: <WarehousesPage /> },
