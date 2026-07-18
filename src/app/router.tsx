@@ -12,6 +12,7 @@ import VouchersPage from '@/pages/VouchersPage'
 import CreditNotesPage from '@/pages/CreditNotesPage'
 import RecurringPage from '@/pages/RecurringPage'
 import DispatchPage from '@/pages/DispatchPage'
+import PurchasesPage from '@/pages/PurchasesPage'
 import ProductsPage from '@/pages/ProductsPage'
 import CategoriesPage from '@/pages/CategoriesPage'
 import WarehousesPage from '@/pages/WarehousesPage'
@@ -36,6 +37,7 @@ export const router = createBrowserRouter([
       { path: 'notas-credito', element: <CreditNotesPage /> },
       { path: 'recurrentes', element: <RecurringPage /> },
       { path: 'despacho', element: <DispatchPage /> },
+      { path: 'compras', element: <PurchasesPage /> },
       { path: 'caja', element: <CashPage /> },
       { path: 'listas-precios', element: <PriceListsPage /> },
       { path: 'productos', element: <ProductsPage /> },

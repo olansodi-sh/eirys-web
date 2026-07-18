@@ -186,3 +186,47 @@ export interface Dispatch {
   notes?: string
   lines: { variantId: string; description: string; quantity: number }[]
 }
+
+export type PurchaseOrderStatus =
+  | 'draft'
+  | 'sent'
+  | 'received'
+  | 'cancelled'
+
+export interface PurchaseOrder {
+  id: string
+  number: string
+  supplier?: ThirdParty | null
+  status: PurchaseOrderStatus
+  total: string
+  date: string
+  warehouseId: string
+  lines: {
+    variantId: string
+    description: string
+    quantity: string
+    unitCost: string
+    total: string
+  }[]
+}
+
+export type PurchaseDocumentType = 'invoice' | 'support_document'
+
+export interface PurchaseInvoice {
+  id: string
+  number: string
+  documentType: PurchaseDocumentType
+  supplier?: ThirdParty | null
+  supplierDocNumber?: string
+  total: string
+  date: string
+}
+
+export interface PurchaseDebitNote {
+  id: string
+  number: string
+  supplierId: string
+  amount: string
+  reason?: string
+  date: string
+}

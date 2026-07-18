@@ -16,6 +16,7 @@ const NAV: NavItem[] = [
   { to: '/notas-credito', label: 'Notas crédito', permission: 'credit_notes.write' },
   { to: '/recurrentes', label: 'Recurrentes', permission: 'recurring.manage' },
   { to: '/despacho', label: 'Despacho', permission: 'dispatch.read' },
+  { to: '/compras', label: 'Compras', permission: 'purchases.read' },
   { to: '/caja', label: 'Caja', permission: 'cash.manage' },
   { to: '/listas-precios', label: 'Listas de precios', permission: 'pricing.read' },
   { to: '/productos', label: 'Productos', permission: 'inventory.read' },

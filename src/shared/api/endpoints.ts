@@ -8,6 +8,10 @@ import type {
   PaymentMethod,
   PriceList,
   Product,
+  PurchaseDebitNote,
+  PurchaseDocumentType,
+  PurchaseInvoice,
+  PurchaseOrder,
   Quote,
   RecurringInvoice,
   Role,
@@ -210,4 +214,44 @@ export const dispatchApi = {
   }) => api.post<Dispatch>('/dispatch', dto).then((r) => r.data),
   markDone: (id: string) =>
     api.patch<Dispatch>(`/dispatch/${id}/done`).then((r) => r.data),
+}
+
+export interface PurchaseLineInput {
+  variantId: string
+  quantity: number
+  unitCost: number
+}
+
+export const purchasesApi = {
+  listOrders: () =>
+    api.get<PurchaseOrder[]>('/purchases/orders').then((r) => r.data),
+  createOrder: (dto: {
+    supplierId: string
+    warehouseId: string
+    lines: PurchaseLineInput[]
+  }) => api.post<PurchaseOrder>('/purchases/orders', dto).then((r) => r.data),
+
+  listInvoices: () =>
+    api.get<PurchaseInvoice[]>('/purchases/invoices').then((r) => r.data),
+  createInvoice: (dto: {
+    documentType: PurchaseDocumentType
+    supplierId: string
+    warehouseId: string
+    purchaseOrderId?: string
+    supplierDocNumber?: string
+    lines: PurchaseLineInput[]
+  }) =>
+    api.post<PurchaseInvoice>('/purchases/invoices', dto).then((r) => r.data),
+
+  listDebitNotes: () =>
+    api.get<PurchaseDebitNote[]>('/purchases/debit-notes').then((r) => r.data),
+  createDebitNote: (dto: {
+    supplierId: string
+    purchaseInvoiceId?: string
+    amount: number
+    reason?: string
+  }) =>
+    api
+      .post<PurchaseDebitNote>('/purchases/debit-notes', dto)
+      .then((r) => r.data),
 }
