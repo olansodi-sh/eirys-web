@@ -9,6 +9,13 @@ Frontend del sistema POS **Eirys**. React 19 + TypeScript + Vite + TailwindCSS.
 - **Shell** con barra lateral y layout.
 - Pantallas CRUD: **Panel**, **Productos** (con variantes talla/color), **Categorías**, **Bodegas**, **Terceros**, **Usuarios**.
 
+## Fase 2 — implementado (POS core)
+
+- **Punto de venta**: catálogo, carrito, precios desde la lista por defecto, cobro (efectivo/tarjeta/transferencia/crédito).
+- **Caja**: apertura, egresos, cierre con arqueo (esperado/contado/diferencia) y movimientos.
+- **Listas de precios**: gestión y edición de precios por variante.
+- **Ventas**: historial de facturas con estado.
+
 ## Requisitos
 
 Necesita la **API** (`eirys-api`) corriendo en `http://localhost:3000`.

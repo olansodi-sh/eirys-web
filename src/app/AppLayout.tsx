@@ -9,6 +9,10 @@ interface NavItem {
 
 const NAV: NavItem[] = [
   { to: '/', label: 'Panel' },
+  { to: '/pos', label: 'Punto de venta', permission: 'sales.write' },
+  { to: '/ventas', label: 'Ventas', permission: 'sales.read' },
+  { to: '/caja', label: 'Caja', permission: 'cash.manage' },
+  { to: '/listas-precios', label: 'Listas de precios', permission: 'pricing.read' },
   { to: '/productos', label: 'Productos', permission: 'inventory.read' },
   { to: '/categorias', label: 'Categorías', permission: 'inventory.read' },
   { to: '/bodegas', label: 'Bodegas', permission: 'inventory.read' },

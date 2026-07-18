@@ -1,9 +1,13 @@
 import { api } from './client'
 import type {
+  CashSession,
   Category,
   LoginResponse,
+  PaymentMethod,
+  PriceList,
   Product,
   Role,
+  Sale,
   ThirdParty,
   User,
   Warehouse,
@@ -81,4 +85,59 @@ export const productsApi = {
     api.patch<Product>(`/inventory/products/${id}`, dto).then((r) => r.data),
   remove: (id: string) =>
     api.delete(`/inventory/products/${id}`).then((r) => r.data),
+}
+
+export const pricingApi = {
+  list: () =>
+    api.get<PriceList[]>('/pricing/price-lists').then((r) => r.data),
+  create: (dto: { name: string; isDefault?: boolean }) =>
+    api.post<PriceList>('/pricing/price-lists', dto).then((r) => r.data),
+  setPrices: (
+    id: string,
+    items: { variantId: string; price: number }[],
+  ) =>
+    api
+      .post(`/pricing/price-lists/${id}/prices`, { items })
+      .then((r) => r.data),
+  getPrice: (variantId: string, priceListId?: string) =>
+    api
+      .get<{ variantId: string; price: number }>('/pricing/price-lists/price', {
+        params: { variantId, priceListId },
+      })
+      .then((r) => r.data),
+}
+
+export const cashApi = {
+  current: () =>
+    api.get<CashSession | null>('/cash/current').then((r) => r.data),
+  open: (openingAmount: number) =>
+    api.post<CashSession>('/cash/open', { openingAmount }).then((r) => r.data),
+  close: (countedAmount: number) =>
+    api.post<CashSession>('/cash/close', { countedAmount }).then((r) => r.data),
+  movementIn: (concept: string, amount: number) =>
+    api.post('/cash/movements/in', { concept, amount }).then((r) => r.data),
+  movementOut: (concept: string, amount: number) =>
+    api.post('/cash/movements/out', { concept, amount }).then((r) => r.data),
+  movements: (sessionId: string) =>
+    api.get(`/cash/${sessionId}/movements`).then((r) => r.data),
+}
+
+export interface SalePayload {
+  warehouseId: string
+  thirdPartyId?: string
+  priceListId?: string
+  lines: {
+    variantId: string
+    quantity: number
+    unitPrice: number
+    discount?: number
+  }[]
+  payment?: { method: PaymentMethod; amount: number }
+}
+
+export const salesApi = {
+  list: () => api.get<Sale[]>('/sales').then((r) => r.data),
+  get: (id: string) => api.get<Sale>(`/sales/${id}`).then((r) => r.data),
+  create: (dto: SalePayload) =>
+    api.post<Sale>('/sales', dto).then((r) => r.data),
 }

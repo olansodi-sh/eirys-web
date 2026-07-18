@@ -78,3 +78,53 @@ export interface Product {
   category?: Category | null
   variants: ProductVariant[]
 }
+
+export interface PriceList {
+  id: string
+  name: string
+  isDefault: boolean
+  active: boolean
+}
+
+export type PaymentMethod = 'cash' | 'card' | 'transfer' | 'voucher' | 'credit'
+
+export interface CashMovement {
+  id: string
+  type: 'in' | 'out'
+  amount: string
+  concept: string
+  createdAt: string
+}
+
+export interface CashSession {
+  id: string
+  status: 'open' | 'closed'
+  openingAmount: string
+  countedAmount: string | null
+  expectedAmount: string | null
+  difference: string | null
+  openedAt: string
+  closedAt: string | null
+}
+
+export interface SaleLine {
+  id: string
+  description: string
+  quantity: string
+  unitPrice: string
+  discount: string
+  total: string
+}
+
+export type SaleStatus = 'confirmed' | 'partial' | 'paid' | 'cancelled'
+
+export interface Sale {
+  id: string
+  number: string
+  thirdParty?: ThirdParty | null
+  total: string
+  paidAmount: string
+  status: SaleStatus
+  date: string
+  lines: SaleLine[]
+}
