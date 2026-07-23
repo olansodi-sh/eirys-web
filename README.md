@@ -1,32 +1,62 @@
-# React + TypeScript + Vite
+# Eirys Web
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Frontend del sistema POS **Eirys**. React 19 + TypeScript + Vite + TailwindCSS.
 
-Currently, two official plugins are available:
+## Fase 1 — implementado
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Login** con JWT y refresco automático de token (interceptor axios).
+- **Rutas protegidas** y menú filtrado por permisos del usuario.
+- **Shell** con barra lateral y layout.
+- Pantallas CRUD: **Panel**, **Productos** (con variantes talla/color), **Categorías**, **Bodegas**, **Terceros**, **Usuarios**.
 
-## React Compiler
+## Fase 2 — implementado (POS core)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Punto de venta**: catálogo, carrito, precios desde la lista por defecto, cobro (efectivo/tarjeta/transferencia/crédito).
+- **Caja**: apertura, egresos, cierre con arqueo (esperado/contado/diferencia) y movimientos.
+- **Listas de precios**: gestión y edición de precios por variante.
+- **Ventas**: historial de facturas con estado.
 
-## Expanding the Oxlint configuration
+## Fase 3 — implementado (complementos de venta)
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+- **Cotizaciones**: creación con líneas y conversión a factura.
+- **Vales**: emisión y redención con saldo.
+- **Notas crédito**: sobre factura, con restock y generación de vale.
+- **Recurrentes**: plantillas y ejecución de las vencidas.
+- **Despacho**: entradas/salidas a demanda con estado.
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+## Fase 4 — implementado (compras y gastos)
+
+- **Compras** (pantalla con pestañas): órdenes de compra, facturas/documentos de soporte (recepción que aumenta stock) y notas débito.
+
+## Fase 5 — implementado (contabilidad y análisis)
+
+- **Reportes**: tarjetas del día + tablas de top productos/clientes y costos por producto/bodega.
+- **Libro diario**: ledger por rango de fechas con totales de ingresos/egresos.
+- **Mis tareas**: tablero Kanban con drag & drop entre columnas.
+
+## Requisitos
+
+Necesita la **API** (`eirys-api`) corriendo en `http://localhost:3000`.
+Vite hace proxy de `/api` hacia ese destino (ver `vite.config.ts`).
+
+## Puesta en marcha
+
+```bash
+yarn install
+yarn dev        # http://localhost:5173
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+Ingresa con el usuario sembrado por la API: `admin@eirys.local` / `admin123`.
+
+## Estructura
+
+```
+src/
+├── app/            # router, layout, ruta protegida
+├── features/auth/  # contexto de autenticación + login
+├── pages/          # pantallas (dashboard, productos, terceros, ...)
+└── shared/
+    ├── api/         # cliente axios + endpoints tipados
+    ├── types/       # tipos del dominio
+    └── ui/          # componentes reutilizables (Button, Input, Modal, ...)
+```
