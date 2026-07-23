@@ -13,9 +13,13 @@ export default defineConfig({
   },
   server: {
     port: 5173,
+    watch: {
+      usePolling: true,
+      interval: 300,
+    },
     proxy: {
       '/api': {
-        target: 'http://localhost:3000',
+        target: process.env.VITE_API_PROXY_TARGET ?? 'http://localhost:3000',
         changeOrigin: true,
       },
     },

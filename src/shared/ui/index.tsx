@@ -92,16 +92,25 @@ export function Modal({
   title,
   onClose,
   children,
+  size = 'lg',
 }: {
   open: boolean
   title: string
   onClose: () => void
   children: ReactNode
+  size?: 'md' | 'lg' | 'xl' | '2xl' | '4xl'
 }) {
   if (!open) return null
+  const widths: Record<string, string> = {
+    md: 'max-w-md',
+    lg: 'max-w-lg',
+    xl: 'max-w-xl',
+    '2xl': 'max-w-2xl',
+    '4xl': 'max-w-4xl',
+  }
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4">
-      <div className="w-full max-w-lg rounded-2xl bg-white shadow-xl">
+      <div className={`w-full ${widths[size]} rounded-2xl bg-white shadow-xl`}>
         <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
           <h3 className="text-lg font-semibold text-slate-800">{title}</h3>
           <button

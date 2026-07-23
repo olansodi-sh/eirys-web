@@ -17,7 +17,7 @@ import ReportsPage from '@/pages/ReportsPage'
 import JournalPage from '@/pages/JournalPage'
 import TasksPage from '@/pages/TasksPage'
 import ProductsPage from '@/pages/ProductsPage'
-import CategoriesPage from '@/pages/CategoriesPage'
+import CatalogSettingsPage from '@/pages/catalog/CatalogSettingsPage'
 import WarehousesPage from '@/pages/WarehousesPage'
 import ThirdPartiesPage from '@/pages/ThirdPartiesPage'
 import UsersPage from '@/pages/UsersPage'
@@ -47,7 +47,7 @@ export const router = createBrowserRouter([
       { path: 'libro-diario', element: <JournalPage /> },
       { path: 'tareas', element: <TasksPage /> },
       { path: 'productos', element: <ProductsPage /> },
-      { path: 'categorias', element: <CategoriesPage /> },
+      { path: 'categorias', element: <CatalogSettingsPage /> },
       { path: 'bodegas', element: <WarehousesPage /> },
       { path: 'terceros', element: <ThirdPartiesPage /> },
       { path: 'usuarios', element: <UsersPage /> },

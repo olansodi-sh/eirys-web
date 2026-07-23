@@ -50,6 +50,18 @@ export interface Category {
   parentId: string | null
 }
 
+export interface Brand {
+  id: string
+  name: string
+  active?: boolean
+}
+
+export interface Material {
+  id: string
+  name: string
+  active?: boolean
+}
+
 export interface Warehouse {
   id: string
   name: string
@@ -64,26 +76,51 @@ export interface ProductVariant {
   color: string
   barcode?: string
   cost: string
+  listPrice: string | null
+  discountPercent: string
+  stockQty: number
+}
+
+export interface ProductImage {
+  id: string
+  productId: string
+  variantId: string | null
+  url: string
+  order: number
 }
 
 export interface Product {
   id: string
   sku: string
   name: string
-  brand?: string
-  material?: string
+  description?: string | null
+  characteristics?: Record<string, string> | null
+  cuidados?: string | null
+  brandId: string | null
+  brand?: Brand | null
+  materialId: string | null
+  material?: Material | null
   unit: string
   active: boolean
   categoryId: string | null
   category?: Category | null
   variants: ProductVariant[]
+  images?: ProductImage[]
+}
+
+export interface PriceListItem {
+  id: string
+  variantId: string
+  variant?: ProductVariant
+  price: string
 }
 
 export interface PriceList {
   id: string
   name: string
-  isDefault: boolean
+  consumidorFinal: boolean
   active: boolean
+  items?: PriceListItem[]
 }
 
 export type PaymentMethod = 'cash' | 'card' | 'transfer' | 'voucher' | 'credit'
@@ -109,6 +146,7 @@ export interface CashSession {
 
 export interface SaleLine {
   id: string
+  variantId?: string
   description: string
   quantity: string
   unitPrice: string

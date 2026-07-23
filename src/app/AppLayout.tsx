@@ -20,7 +20,7 @@ const NAV: NavItem[] = [
   { to: '/caja', label: 'Caja', permission: 'cash.manage' },
   { to: '/listas-precios', label: 'Listas de precios', permission: 'pricing.read' },
   { to: '/productos', label: 'Productos', permission: 'inventory.read' },
-  { to: '/categorias', label: 'Categorías', permission: 'inventory.read' },
+  { to: '/categorias', label: 'Catálogo', permission: 'inventory.read' },
   { to: '/bodegas', label: 'Bodegas', permission: 'inventory.read' },
   { to: '/terceros', label: 'Terceros', permission: 'third_parties.read' },
   { to: '/reportes', label: 'Reportes', permission: 'reports.read' },

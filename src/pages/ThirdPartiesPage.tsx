@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { thirdPartiesApi } from '@/shared/api/endpoints'
@@ -11,8 +11,9 @@ import {
   Modal,
   Select,
 } from '@/shared/ui'
+import { RowActions } from '@/shared/ui/RowActions'
 import { useAuth } from '@/features/auth/AuthContext'
-import type { ThirdPartyType } from '@/shared/types'
+import type { ThirdParty, ThirdPartyType } from '@/shared/types'
 
 interface FormValues {
   type: ThirdPartyType
@@ -28,6 +29,7 @@ export default function ThirdPartiesPage() {
   const { can } = useAuth()
   const qc = useQueryClient()
   const [open, setOpen] = useState(false)
+  const [editing, setEditing] = useState<ThirdParty | undefined>(undefined)
   const { register, handleSubmit, reset } = useForm<FormValues>({
     defaultValues: { type: 'client', docType: 'CC' },
   })
@@ -37,13 +39,35 @@ export default function ThirdPartiesPage() {
     queryFn: () => thirdPartiesApi.list(),
   })
 
-  const create = useMutation({
-    mutationFn: (v: FormValues) => thirdPartiesApi.create(v),
+  useEffect(() => {
+    if (!open) return
+    reset(
+      editing
+        ? {
+            type: editing.type,
+            name: editing.name,
+            docType: editing.docType,
+            docNumber: editing.docNumber ?? '',
+            email: editing.email ?? '',
+            phone: editing.phone ?? '',
+            address: editing.address ?? '',
+          }
+        : { type: 'client', docType: 'CC' },
+    )
+  }, [open, editing, reset])
+
+  const save = useMutation({
+    mutationFn: (v: FormValues) =>
+      editing ? thirdPartiesApi.update(editing.id, v) : thirdPartiesApi.create(v),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['third-parties'] })
       setOpen(false)
-      reset()
     },
+  })
+
+  const remove = useMutation({
+    mutationFn: (id: string) => thirdPartiesApi.remove(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['third-parties'] }),
   })
 
   return (
@@ -51,7 +75,14 @@ export default function ThirdPartiesPage() {
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-semibold text-slate-800">Terceros</h1>
         {can('third_parties.write') && (
-          <Button onClick={() => setOpen(true)}>Nuevo tercero</Button>
+          <Button
+            onClick={() => {
+              setEditing(undefined)
+              setOpen(true)
+            }}
+          >
+            Nuevo tercero
+          </Button>
         )}
       </div>
 
@@ -68,6 +99,7 @@ export default function ThirdPartiesPage() {
                 <th className="px-5 py-3 font-medium">Documento</th>
                 <th className="px-5 py-3 font-medium">Contacto</th>
                 <th className="px-5 py-3 font-medium">Tipo</th>
+                <th className="px-5 py-3 text-right">Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -87,6 +119,18 @@ export default function ThirdPartiesPage() {
                       {t.type === 'client' ? 'Cliente' : 'Proveedor'}
                     </Badge>
                   </td>
+                  <td className="px-5 py-3">
+                    {can('third_parties.write') && (
+                      <RowActions
+                        onEdit={() => {
+                          setEditing(t)
+                          setOpen(true)
+                        }}
+                        onDelete={() => remove.mutate(t.id)}
+                        deleteConfirm={`¿Eliminar a "${t.name}"?`}
+                      />
+                    )}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -94,9 +138,9 @@ export default function ThirdPartiesPage() {
         )}
       </Card>
 
-      <Modal open={open} title="Nuevo tercero" onClose={() => setOpen(false)}>
+      <Modal open={open} title={editing ? 'Editar tercero' : 'Nuevo tercero'} onClose={() => setOpen(false)}>
         <form
-          onSubmit={handleSubmit((v) => create.mutate(v))}
+          onSubmit={handleSubmit((v) => save.mutate(v))}
           className="space-y-4"
         >
           <Input label="Nombre" {...register('name', { required: true })} />
@@ -126,7 +170,7 @@ export default function ThirdPartiesPage() {
             >
               Cancelar
             </Button>
-            <Button type="submit" disabled={create.isPending}>
+            <Button type="submit" disabled={save.isPending}>
               Guardar
             </Button>
           </div>

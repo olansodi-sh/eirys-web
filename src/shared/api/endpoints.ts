@@ -1,13 +1,16 @@
 import { api } from './client'
 import type {
+  Brand,
   CashSession,
   Category,
   CreditNote,
   Dispatch,
   LoginResponse,
+  Material,
   PaymentMethod,
   PriceList,
   Product,
+  ProductImage,
   PurchaseDebitNote,
   PurchaseDocumentType,
   PurchaseInvoice,
@@ -55,8 +58,30 @@ export const categoriesApi = {
   list: () => api.get<Category[]>('/inventory/categories').then((r) => r.data),
   create: (dto: { name: string; parentId?: string }) =>
     api.post<Category>('/inventory/categories', dto).then((r) => r.data),
+  update: (id: string, dto: { name?: string; parentId?: string }) =>
+    api.patch<Category>(`/inventory/categories/${id}`, dto).then((r) => r.data),
   remove: (id: string) =>
     api.delete(`/inventory/categories/${id}`).then((r) => r.data),
+}
+
+export const brandsApi = {
+  list: () => api.get<Brand[]>('/inventory/brands').then((r) => r.data),
+  create: (dto: { name: string; active?: boolean }) =>
+    api.post<Brand>('/inventory/brands', dto).then((r) => r.data),
+  update: (id: string, dto: { name?: string; active?: boolean }) =>
+    api.patch<Brand>(`/inventory/brands/${id}`, dto).then((r) => r.data),
+  remove: (id: string) =>
+    api.delete(`/inventory/brands/${id}`).then((r) => r.data),
+}
+
+export const materialsApi = {
+  list: () => api.get<Material[]>('/inventory/materials').then((r) => r.data),
+  create: (dto: { name: string; active?: boolean }) =>
+    api.post<Material>('/inventory/materials', dto).then((r) => r.data),
+  update: (id: string, dto: { name?: string; active?: boolean }) =>
+    api.patch<Material>(`/inventory/materials/${id}`, dto).then((r) => r.data),
+  remove: (id: string) =>
+    api.delete(`/inventory/materials/${id}`).then((r) => r.data),
 }
 
 export const warehousesApi = {
@@ -72,14 +97,21 @@ export const warehousesApi = {
 export interface ProductInput {
   sku: string
   name: string
-  brand?: string
-  material?: string
+  description?: string
+  characteristics?: Record<string, string>
+  cuidados?: string
+  brandId?: string
+  materialId?: string
   categoryId?: string
   variants?: {
+    id?: string
     size: string
     color: string
     barcode?: string
     cost?: number
+    listPrice?: number
+    discountPercent?: number
+    stockQty?: number
   }[]
 }
 
@@ -94,13 +126,70 @@ export const productsApi = {
     api.patch<Product>(`/inventory/products/${id}`, dto).then((r) => r.data),
   remove: (id: string) =>
     api.delete(`/inventory/products/${id}`).then((r) => r.data),
+  export: (priceListId?: string) =>
+    api
+      .get('/inventory/products/export', {
+        params: { priceListId },
+        responseType: 'blob',
+      })
+      .then((r) => r.data as Blob),
+  importExcel: (file: File) => {
+    const fd = new FormData()
+    fd.append('file', file)
+    return api
+      .post<ImportProductsResult>('/inventory/products/import', fd, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      .then((r) => r.data)
+  },
+  uploadImage: (productId: string, file: File, variantId?: string | null) => {
+    const fd = new FormData()
+    fd.append('file', file)
+    if (variantId) fd.append('variantId', variantId)
+    return api
+      .post<ProductImage>(`/inventory/products/${productId}/images`, fd, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      .then((r) => r.data)
+  },
+  replaceImage: (productId: string, imageId: string, file: File) => {
+    const fd = new FormData()
+    fd.append('file', file)
+    return api
+      .patch<ProductImage>(`/inventory/products/${productId}/images/${imageId}`, fd, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      .then((r) => r.data)
+  },
+  removeImage: (productId: string, imageId: string) =>
+    api
+      .delete(`/inventory/products/${productId}/images/${imageId}`)
+      .then((r) => r.data),
+}
+
+export interface ImportProductsResult {
+  created: number
+  updated: number
+  skipped: { row: number; sku: string; reason: string }[]
+}
+
+export interface ImportPriceListResult {
+  priceListId: string
+  applied: number
+  skipped: { row: number; sku: string; size: string; color: string; reason: string }[]
 }
 
 export const pricingApi = {
   list: () =>
     api.get<PriceList[]>('/pricing/price-lists').then((r) => r.data),
-  create: (dto: { name: string; isDefault?: boolean }) =>
+  get: (id: string) =>
+    api.get<PriceList>(`/pricing/price-lists/${id}`).then((r) => r.data),
+  create: (dto: { name: string; consumidorFinal?: boolean }) =>
     api.post<PriceList>('/pricing/price-lists', dto).then((r) => r.data),
+  update: (id: string, dto: { name?: string; consumidorFinal?: boolean; active?: boolean }) =>
+    api.patch<PriceList>(`/pricing/price-lists/${id}`, dto).then((r) => r.data),
+  remove: (id: string) =>
+    api.delete(`/pricing/price-lists/${id}`).then((r) => r.data),
   setPrices: (
     id: string,
     items: { variantId: string; price: number }[],
@@ -114,6 +203,17 @@ export const pricingApi = {
         params: { variantId, priceListId },
       })
       .then((r) => r.data),
+  importExcel: (file: File, name?: string, priceListId?: string) => {
+    const fd = new FormData()
+    fd.append('file', file)
+    if (name) fd.append('name', name)
+    if (priceListId) fd.append('priceListId', priceListId)
+    return api
+      .post<ImportPriceListResult>('/pricing/price-lists/import', fd, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      .then((r) => r.data)
+  },
 }
 
 export const cashApi = {
@@ -159,8 +259,17 @@ export interface QuoteLineInput {
 
 export const quotesApi = {
   list: () => api.get<Quote[]>('/quotes').then((r) => r.data),
-  create: (dto: { thirdPartyId?: string; lines: QuoteLineInput[] }) =>
-    api.post<Quote>('/quotes', dto).then((r) => r.data),
+  get: (id: string) => api.get<Quote>(`/quotes/${id}`).then((r) => r.data),
+  create: (dto: {
+    thirdPartyId?: string
+    validUntil?: string
+    lines: QuoteLineInput[]
+  }) => api.post<Quote>('/quotes', dto).then((r) => r.data),
+  update: (
+    id: string,
+    dto: { thirdPartyId?: string; validUntil?: string; lines?: QuoteLineInput[] },
+  ) => api.patch<Quote>(`/quotes/${id}`, dto).then((r) => r.data),
+  remove: (id: string) => api.delete(`/quotes/${id}`).then((r) => r.data),
   convert: (id: string, warehouseId: string) =>
     api
       .post<Sale>(`/quotes/${id}/convert`, { warehouseId })

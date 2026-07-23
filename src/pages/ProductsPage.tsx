@@ -1,55 +1,53 @@
-import { useState } from 'react'
-import { useFieldArray, useForm } from 'react-hook-form'
+import { useRef, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { categoriesApi, productsApi } from '@/shared/api/endpoints'
-import type { ProductInput } from '@/shared/api/endpoints'
-import { Badge, Button, Card, EmptyState, Input, Modal, Select } from '@/shared/ui'
+import { productsApi } from '@/shared/api/endpoints'
+import type { ImportProductsResult } from '@/shared/api/endpoints'
+import type { Product } from '@/shared/types'
+import { Badge, Button, Card, EmptyState, Input } from '@/shared/ui'
+import { RowActions } from '@/shared/ui/RowActions'
+import { InlineAlert } from '@/shared/ui/InlineAlert'
+import { downloadBlob } from '@/shared/utils/download'
 import { useAuth } from '@/features/auth/AuthContext'
-
-interface FormValues {
-  sku: string
-  name: string
-  brand?: string
-  material?: string
-  categoryId?: string
-  variants: { size: string; color: string; cost?: number }[]
-}
+import { ProductFormModal } from './products/ProductFormModal'
 
 export default function ProductsPage() {
   const { can } = useAuth()
   const qc = useQueryClient()
   const [open, setOpen] = useState(false)
+  const [editing, setEditing] = useState<Product | undefined>(undefined)
   const [search, setSearch] = useState('')
-
-  const { register, handleSubmit, reset, control } = useForm<FormValues>({
-    defaultValues: { variants: [{ size: '', color: '', cost: 0 }] },
-  })
-  const { fields, append, remove } = useFieldArray({ control, name: 'variants' })
+  const [importFile, setImportFile] = useState<File | null>(null)
+  const [importResult, setImportResult] = useState<ImportProductsResult | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const { data, isLoading } = useQuery({
     queryKey: ['products', search],
     queryFn: () => productsApi.list(search || undefined),
   })
-  const categories = useQuery({
-    queryKey: ['categories'],
-    queryFn: () => categoriesApi.list(),
+
+  const remove = useMutation({
+    mutationFn: (id: string) => productsApi.remove(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['products'] }),
   })
 
-  const create = useMutation({
-    mutationFn: (v: FormValues) => {
-      const payload: ProductInput = {
-        ...v,
-        categoryId: v.categoryId || undefined,
-        variants: v.variants
-          .filter((x) => x.size && x.color)
-          .map((x) => ({ ...x, cost: Number(x.cost) || 0 })),
-      }
-      return productsApi.create(payload)
+  const exportExcel = useMutation({
+    mutationFn: () => productsApi.export(),
+    onSuccess: (blob) => downloadBlob(blob, 'productos.xlsx'),
+  })
+
+  const importExcel = useMutation({
+    mutationFn: () => {
+      if (!importFile) throw new Error('Selecciona un archivo')
+      return productsApi.importExcel(importFile)
     },
-    onSuccess: () => {
+    onSuccess: (result) => {
+      setImportResult(result)
       qc.invalidateQueries({ queryKey: ['products'] })
-      setOpen(false)
-      reset({ variants: [{ size: '', color: '', cost: 0 }] })
+      qc.invalidateQueries({ queryKey: ['categories'] })
+      qc.invalidateQueries({ queryKey: ['brands'] })
+      qc.invalidateQueries({ queryKey: ['materials'] })
+      setImportFile(null)
+      if (fileInputRef.current) fileInputRef.current.value = ''
     },
   })
 
@@ -57,9 +55,21 @@ export default function ProductsPage() {
     <div>
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-semibold text-slate-800">Productos</h1>
-        {can('inventory.write') && (
-          <Button onClick={() => setOpen(true)}>Nuevo producto</Button>
-        )}
+        <div className="flex gap-2">
+          <Button variant="secondary" onClick={() => exportExcel.mutate()} disabled={exportExcel.isPending}>
+            Descargar Excel
+          </Button>
+          {can('inventory.write') && (
+            <Button
+              onClick={() => {
+                setEditing(undefined)
+                setOpen(true)
+              }}
+            >
+              Nuevo producto
+            </Button>
+          )}
+        </div>
       </div>
 
       <div className="mb-4 max-w-xs">
@@ -82,7 +92,9 @@ export default function ProductsPage() {
                 <th className="px-5 py-3 font-medium">SKU</th>
                 <th className="px-5 py-3 font-medium">Nombre</th>
                 <th className="px-5 py-3 font-medium">Marca</th>
+                <th className="px-5 py-3 font-medium">Material</th>
                 <th className="px-5 py-3 font-medium">Variantes</th>
+                <th className="px-5 py-3 font-medium text-right">Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -94,7 +106,8 @@ export default function ProductsPage() {
                   <td className="px-5 py-3 font-medium text-slate-700">
                     {p.name}
                   </td>
-                  <td className="px-5 py-3 text-slate-500">{p.brand || '—'}</td>
+                  <td className="px-5 py-3 text-slate-500">{p.brand?.name || '—'}</td>
+                  <td className="px-5 py-3 text-slate-500">{p.material?.name || '—'}</td>
                   <td className="px-5 py-3">
                     <div className="flex flex-wrap gap-1">
                       {p.variants?.length ? (
@@ -108,6 +121,18 @@ export default function ProductsPage() {
                       )}
                     </div>
                   </td>
+                  <td className="px-5 py-3">
+                    {can('inventory.write') && (
+                      <RowActions
+                        onEdit={() => {
+                          setEditing(p)
+                          setOpen(true)
+                        }}
+                        onDelete={() => remove.mutate(p.id)}
+                        deleteConfirm={`¿Eliminar el producto "${p.name}"?`}
+                      />
+                    )}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -115,86 +140,59 @@ export default function ProductsPage() {
         )}
       </Card>
 
-      <Modal open={open} title="Nuevo producto" onClose={() => setOpen(false)}>
-        <form
-          onSubmit={handleSubmit((v) => create.mutate(v))}
-          className="space-y-4"
-        >
-          <div className="grid grid-cols-2 gap-3">
-            <Input label="SKU" {...register('sku', { required: true })} />
-            <Input label="Nombre" {...register('name', { required: true })} />
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <Input label="Marca" {...register('brand')} />
-            <Input label="Material" {...register('material')} />
-          </div>
-          <Select label="Categoría" {...register('categoryId')}>
-            <option value="">Sin categoría</option>
-            {categories.data?.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
-              </option>
-            ))}
-          </Select>
-
-          <div>
-            <div className="mb-2 flex items-center justify-between">
-              <span className="text-sm font-medium text-slate-600">
-                Variantes (talla / color)
-              </span>
-              <Button
-                type="button"
-                variant="ghost"
-                onClick={() => append({ size: '', color: '', cost: 0 })}
-              >
-                + Agregar
-              </Button>
-            </div>
-            <div className="space-y-2">
-              {fields.map((f, i) => (
-                <div key={f.id} className="flex items-end gap-2">
-                  <Input
-                    label={i === 0 ? 'Talla' : undefined}
-                    placeholder="37"
-                    {...register(`variants.${i}.size`)}
-                  />
-                  <Input
-                    label={i === 0 ? 'Color' : undefined}
-                    placeholder="Negro"
-                    {...register(`variants.${i}.color`)}
-                  />
-                  <Input
-                    label={i === 0 ? 'Costo' : undefined}
-                    type="number"
-                    placeholder="0"
-                    {...register(`variants.${i}.cost`)}
-                  />
-                  <Button
-                    type="button"
-                    variant="danger"
-                    onClick={() => remove(i)}
-                  >
-                    ✕
-                  </Button>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex justify-end gap-2 pt-2">
+      {can('inventory.write') && (
+        <Card className="mt-6 p-5">
+          <h2 className="mb-3 text-sm font-semibold text-slate-700">
+            Cargue masivo desde Excel
+          </h2>
+          <p className="mb-4 text-xs text-slate-400">
+            Descarga el Excel de productos, complétalo (agrega filas nuevas
+            con SKU nuevo para crear productos, o edita filas existentes para
+            actualizarlos) y súbelo aquí. Categoría, Marca y Material se
+            crean automáticamente si no existen. Características debe ir en
+            formato JSON, ej:{' '}
+            <code>{'{"Material suela": "Goma"}'}</code>.
+          </p>
+          <div className="flex items-end gap-3">
+            <label className="block flex-1">
+              <span className="mb-1 block text-sm font-medium text-slate-600">Archivo (.xlsx)</span>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".xlsx"
+                onChange={(e) => setImportFile(e.target.files?.[0] ?? null)}
+                className="block w-full text-sm"
+              />
+            </label>
             <Button
-              type="button"
-              variant="secondary"
-              onClick={() => setOpen(false)}
+              onClick={() => importExcel.mutate()}
+              disabled={!importFile || importExcel.isPending}
             >
-              Cancelar
-            </Button>
-            <Button type="submit" disabled={create.isPending}>
-              Guardar
+              {importExcel.isPending ? 'Importando…' : 'Importar'}
             </Button>
           </div>
-        </form>
-      </Modal>
+          {importResult && (
+            <div className="mt-4">
+              <InlineAlert kind={importResult.skipped.length ? 'error' : 'success'}>
+                {importResult.created} productos creados, {importResult.updated} actualizados.{' '}
+                {importResult.skipped.length > 0 &&
+                  `${importResult.skipped.length} filas omitidas.`}
+              </InlineAlert>
+              {importResult.skipped.length > 0 && (
+                <ul className="mt-2 max-h-32 overflow-y-auto text-xs text-slate-500">
+                  {importResult.skipped.map((s, i) => (
+                    <li key={i}>
+                      Fila {s.row} ({s.sku}): {s.reason}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
+        </Card>
+      )}
+
+      <ProductFormModal open={open} onClose={() => setOpen(false)} product={editing} />
     </div>
   )
 }

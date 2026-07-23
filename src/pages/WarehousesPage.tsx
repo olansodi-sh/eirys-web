@@ -1,9 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { warehousesApi } from '@/shared/api/endpoints'
 import { Badge, Button, Card, EmptyState, Input, Modal } from '@/shared/ui'
+import { RowActions } from '@/shared/ui/RowActions'
 import { useAuth } from '@/features/auth/AuthContext'
+import type { Warehouse } from '@/shared/types'
 
 interface FormValues {
   name: string
@@ -15,6 +17,7 @@ export default function WarehousesPage() {
   const { can } = useAuth()
   const qc = useQueryClient()
   const [open, setOpen] = useState(false)
+  const [editing, setEditing] = useState<Warehouse | undefined>(undefined)
   const { register, handleSubmit, reset } = useForm<FormValues>()
 
   const { data, isLoading } = useQuery({
@@ -22,13 +25,27 @@ export default function WarehousesPage() {
     queryFn: () => warehousesApi.list(),
   })
 
-  const create = useMutation({
-    mutationFn: (v: FormValues) => warehousesApi.create(v),
+  useEffect(() => {
+    if (!open) return
+    reset(
+      editing
+        ? { name: editing.name, location: editing.location ?? '', isQuality: editing.isQuality }
+        : { name: '', location: '', isQuality: false },
+    )
+  }, [open, editing, reset])
+
+  const save = useMutation({
+    mutationFn: (v: FormValues) =>
+      editing ? warehousesApi.update(editing.id, v) : warehousesApi.create(v),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['warehouses'] })
       setOpen(false)
-      reset()
     },
+  })
+
+  const remove = useMutation({
+    mutationFn: (id: string) => warehousesApi.remove(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['warehouses'] }),
   })
 
   return (
@@ -36,7 +53,14 @@ export default function WarehousesPage() {
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-semibold text-slate-800">Bodegas</h1>
         {can('inventory.write') && (
-          <Button onClick={() => setOpen(true)}>Nueva bodega</Button>
+          <Button
+            onClick={() => {
+              setEditing(undefined)
+              setOpen(true)
+            }}
+          >
+            Nueva bodega
+          </Button>
         )}
       </div>
 
@@ -52,6 +76,7 @@ export default function WarehousesPage() {
                 <th className="px-5 py-3 font-medium">Nombre</th>
                 <th className="px-5 py-3 font-medium">Ubicación</th>
                 <th className="px-5 py-3 font-medium">Tipo</th>
+                <th className="px-5 py-3 text-right">Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -66,6 +91,18 @@ export default function WarehousesPage() {
                   <td className="px-5 py-3">
                     {w.isQuality ? <Badge>Calidad</Badge> : <Badge>Normal</Badge>}
                   </td>
+                  <td className="px-5 py-3">
+                    {can('inventory.write') && (
+                      <RowActions
+                        onEdit={() => {
+                          setEditing(w)
+                          setOpen(true)
+                        }}
+                        onDelete={() => remove.mutate(w.id)}
+                        deleteConfirm={`¿Eliminar la bodega "${w.name}"?`}
+                      />
+                    )}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -73,9 +110,9 @@ export default function WarehousesPage() {
         )}
       </Card>
 
-      <Modal open={open} title="Nueva bodega" onClose={() => setOpen(false)}>
+      <Modal open={open} title={editing ? 'Editar bodega' : 'Nueva bodega'} onClose={() => setOpen(false)}>
         <form
-          onSubmit={handleSubmit((v) => create.mutate(v))}
+          onSubmit={handleSubmit((v) => save.mutate(v))}
           className="space-y-4"
         >
           <Input label="Nombre" {...register('name', { required: true })} />
@@ -92,7 +129,7 @@ export default function WarehousesPage() {
             >
               Cancelar
             </Button>
-            <Button type="submit" disabled={create.isPending}>
+            <Button type="submit" disabled={save.isPending}>
               Guardar
             </Button>
           </div>
