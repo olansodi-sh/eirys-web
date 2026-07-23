@@ -149,9 +149,9 @@ export default function ProductsPage() {
             Descarga el Excel de productos, complétalo (agrega filas nuevas
             con SKU nuevo para crear productos, o edita filas existentes para
             actualizarlos) y súbelo aquí. Categoría, Marca y Material se
-            crean automáticamente si no existen. Características debe ir en
-            formato JSON, ej:{' '}
-            <code>{'{"Material suela": "Goma"}'}</code>.
+            crean automáticamente si no existen. Características va como texto
+            "clave: valor" separado por punto y coma, ej:{' '}
+            <code>Suela: PVC; Tacón: 5.5cm</code>.
           </p>
           <div className="flex items-end gap-3">
             <label className="block flex-1">
