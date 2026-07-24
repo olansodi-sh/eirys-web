@@ -5,7 +5,7 @@ import { Badge, Button, Card, EmptyState } from '@/shared/ui'
 import { RowActions } from '@/shared/ui/RowActions'
 import { useAuth } from '@/features/auth/AuthContext'
 import type { ThirdParty } from '@/shared/types'
-import { ThirdPartyFormModal } from './third-parties/ThirdPartyFormModal'
+import { ThirdPartyFormModal } from './ThirdPartyFormModal'
 
 export default function ThirdPartiesPage() {
   const { can } = useAuth()

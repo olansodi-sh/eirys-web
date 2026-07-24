@@ -13,7 +13,7 @@ import { Badge, Button, Card, Input, Select } from '@/shared/ui'
 import { SearchableSelect } from '@/shared/ui/SearchableSelect'
 import { money } from '@/shared/utils/format'
 import type { PaymentMethod, Product, ProductVariant, ThirdParty } from '@/shared/types'
-import { ThirdPartyFormModal } from './third-parties/ThirdPartyFormModal'
+import { ThirdPartyFormModal } from '../third-parties/ThirdPartyFormModal'
 
 const STORAGE_KEY = 'eirys-pos-order'
 

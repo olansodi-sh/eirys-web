@@ -8,7 +8,7 @@ import { RowActions } from '@/shared/ui/RowActions'
 import { InlineAlert } from '@/shared/ui/InlineAlert'
 import { downloadBlob } from '@/shared/utils/download'
 import { useAuth } from '@/features/auth/AuthContext'
-import { ProductFormModal } from './products/ProductFormModal'
+import { ProductFormModal } from './ProductFormModal'
 
 export default function ProductsPage() {
   const { can } = useAuth()

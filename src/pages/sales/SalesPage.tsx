@@ -4,7 +4,7 @@ import { salesApi } from '@/shared/api/endpoints'
 import { Badge, Button, Card, EmptyState, Input } from '@/shared/ui'
 import { money } from '@/shared/utils/format'
 import type { Sale, SaleStatus } from '@/shared/types'
-import { SaleInvoiceModal } from './sales/SaleInvoiceModal'
+import { SaleInvoiceModal } from './SaleInvoiceModal'
 
 const STATUS_LABEL: Record<SaleStatus, string> = {
   confirmed: 'Pendiente',
