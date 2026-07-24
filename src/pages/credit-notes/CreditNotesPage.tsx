@@ -3,6 +3,15 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { creditNotesApi, salesApi } from '@/shared/api/endpoints'
 import { Badge, Button, Card, EmptyState, Input, Modal, Select } from '@/shared/ui'
 import { money } from '@/shared/utils/format'
+import type { ReturnReason } from '@/shared/types'
+
+const REASON_LABEL: Record<ReturnReason, string> = {
+  producto_defectuoso: 'Producto defectuoso',
+  talla_color_incorrecto: 'Talla o color incorrecto',
+  cliente_no_satisfecho: 'Cliente no quedó satisfecho',
+  error_facturacion: 'Error en la facturación',
+  otro: 'Otro',
+}
 
 export default function CreditNotesPage() {
   const qc = useQueryClient()
@@ -10,7 +19,8 @@ export default function CreditNotesPage() {
   const [saleId, setSaleId] = useState('')
   const [type, setType] = useState<'partial' | 'total'>('total')
   const [amount, setAmount] = useState(0)
-  const [reason, setReason] = useState('')
+  const [reason, setReason] = useState<ReturnReason | ''>('')
+  const [description, setDescription] = useState('')
   const [restock, setRestock] = useState(true)
   const [generateVoucher, setGenerateVoucher] = useState(true)
 
@@ -23,7 +33,8 @@ export default function CreditNotesPage() {
         saleId,
         type,
         amount: type === 'partial' ? amount : undefined,
-        reason: reason || undefined,
+        reason: reason as ReturnReason,
+        description,
         restock,
         generateVoucher,
       }),
@@ -33,8 +44,12 @@ export default function CreditNotesPage() {
       qc.invalidateQueries({ queryKey: ['vouchers'] })
       setOpen(false)
       setSaleId('')
+      setReason('')
+      setDescription('')
     },
   })
+
+  const canSubmit = !!saleId && !!reason && description.trim().length > 0
 
   return (
     <div>
@@ -54,6 +69,8 @@ export default function CreditNotesPage() {
               <tr className="border-b border-gray-300 text-left text-gray-500">
                 <th className="px-5 py-3 font-medium">Número</th>
                 <th className="px-5 py-3 font-medium">Tipo</th>
+                <th className="px-5 py-3 font-medium">Motivo</th>
+                <th className="px-5 py-3 font-medium">Descripción</th>
                 <th className="px-5 py-3 font-medium">Monto</th>
                 <th className="px-5 py-3 font-medium">Vale</th>
               </tr>
@@ -66,6 +83,12 @@ export default function CreditNotesPage() {
                   </td>
                   <td className="px-5 py-3">
                     <Badge>{n.type === 'total' ? 'Total' : 'Parcial'}</Badge>
+                  </td>
+                  <td className="px-5 py-3 text-gray-500">
+                    {REASON_LABEL[n.reason] ?? n.reason}
+                  </td>
+                  <td className="max-w-xs truncate px-5 py-3 text-gray-500" title={n.description}>
+                    {n.description || '—'}
                   </td>
                   <td className="px-5 py-3 font-medium text-gray-700">
                     {money(n.amount)}
@@ -98,7 +121,7 @@ export default function CreditNotesPage() {
           </Select>
           <div className="grid grid-cols-2 gap-3">
             <Select
-              label="Tipo"
+              label="Tipo de devolución"
               value={type}
               onChange={(e) => setType(e.target.value as 'partial' | 'total')}
             >
@@ -114,11 +137,30 @@ export default function CreditNotesPage() {
               />
             )}
           </div>
-          <Input
-            label="Motivo"
+          <Select
+            label="Motivo de devolución"
             value={reason}
-            onChange={(e) => setReason(e.target.value)}
-          />
+            onChange={(e) => setReason(e.target.value as ReturnReason)}
+          >
+            <option value="">Seleccionar motivo…</option>
+            {Object.entries(REASON_LABEL).map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </Select>
+          <label className="block">
+            <span className="mb-1 block text-sm font-medium text-gray-700">
+              Descripción
+            </span>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              rows={3}
+              placeholder="Detalle lo ocurrido con este pedido…"
+              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-primary"
+            />
+          </label>
           <label className="flex items-center gap-2 text-sm text-gray-700">
             <input
               type="checkbox"
@@ -141,7 +183,7 @@ export default function CreditNotesPage() {
             </Button>
             <Button
               onClick={() => create.mutate()}
-              disabled={!saleId || create.isPending}
+              disabled={!canSubmit || create.isPending}
             >
               Registrar
             </Button>

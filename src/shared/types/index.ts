@@ -199,13 +199,21 @@ export interface Voucher {
   thirdParty?: ThirdParty | null
 }
 
+export type ReturnReason =
+  | 'producto_defectuoso'
+  | 'talla_color_incorrecto'
+  | 'cliente_no_satisfecho'
+  | 'error_facturacion'
+  | 'otro'
+
 export interface CreditNote {
   id: string
   number: string
   saleId: string
   type: 'partial' | 'total'
   amount: string
-  reason?: string
+  reason: ReturnReason
+  description: string
   restock: boolean
   voucherId: string | null
 }

@@ -17,6 +17,7 @@ import type {
   PurchaseOrder,
   Quote,
   RecurringInvoice,
+  ReturnReason,
   Role,
   Sale,
   ThirdParty,
@@ -297,7 +298,8 @@ export const creditNotesApi = {
     saleId: string
     type: 'partial' | 'total'
     amount?: number
-    reason?: string
+    reason: ReturnReason
+    description: string
     restock?: boolean
     generateVoucher?: boolean
   }) => api.post<CreditNote>('/credit-notes', dto).then((r) => r.data),
