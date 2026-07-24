@@ -53,7 +53,7 @@ export default function UsersPage() {
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-slate-800">Usuarios</h1>
+        <h1 className="text-2xl font-semibold text-gray-900">Usuarios</h1>
         <Button
           onClick={() => {
             setEditing(undefined)
@@ -72,7 +72,7 @@ export default function UsersPage() {
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-slate-100 text-left text-slate-400">
+              <tr className="border-b border-gray-300 text-left text-gray-500">
                 <th className="px-5 py-3 font-medium">Nombre</th>
                 <th className="px-5 py-3 font-medium">Correo</th>
                 <th className="px-5 py-3 font-medium">Rol</th>
@@ -82,12 +82,12 @@ export default function UsersPage() {
             </thead>
             <tbody>
               {data.map((u) => (
-                <tr key={u.id} className="border-b border-slate-50">
-                  <td className="px-5 py-3 font-medium text-slate-700">
+                <tr key={u.id} className="border-b border-gray-100">
+                  <td className="px-5 py-3 font-medium text-gray-700">
                     {u.name}
                   </td>
-                  <td className="px-5 py-3 text-slate-500">{u.email}</td>
-                  <td className="px-5 py-3 text-slate-500">
+                  <td className="px-5 py-3 text-gray-500">{u.email}</td>
+                  <td className="px-5 py-3 text-gray-500">
                     {u.role?.name || '—'}
                   </td>
                   <td className="px-5 py-3">

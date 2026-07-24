@@ -28,7 +28,7 @@ export default function JournalPage() {
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-semibold text-slate-800">
+      <h1 className="mb-6 text-2xl font-semibold text-gray-900">
         Libro diario
       </h1>
 
@@ -46,15 +46,15 @@ export default function JournalPage() {
           onChange={(e) => setTo(e.target.value)}
         />
         <div className="ml-auto flex gap-4 text-sm">
-          <span className="text-slate-500">
+          <span className="text-gray-500">
             Ingresos{' '}
-            <span className="font-semibold text-green-600">
+            <span className="font-semibold text-success">
               {money(journal.data?.totalIncome ?? 0)}
             </span>
           </span>
-          <span className="text-slate-500">
+          <span className="text-gray-500">
             Egresos{' '}
-            <span className="font-semibold text-red-600">
+            <span className="font-semibold text-danger">
               {money(journal.data?.totalExpense ?? 0)}
             </span>
           </span>
@@ -67,7 +67,7 @@ export default function JournalPage() {
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-slate-100 text-left text-slate-400">
+              <tr className="border-b border-gray-300 text-left text-gray-500">
                 <th className="px-5 py-3 font-medium">Fecha</th>
                 <th className="px-5 py-3 font-medium">Tipo</th>
                 <th className="px-5 py-3 font-medium">Referencia</th>
@@ -77,18 +77,18 @@ export default function JournalPage() {
             </thead>
             <tbody>
               {(journal.data.entries as Entry[]).map((e, i) => (
-                <tr key={i} className="border-b border-slate-50">
-                  <td className="px-5 py-2 text-slate-500">{e.date}</td>
+                <tr key={i} className="border-b border-gray-100">
+                  <td className="px-5 py-2 text-gray-500">{e.date}</td>
                   <td className="px-5 py-2">
                     <Badge>{e.type}</Badge>
                   </td>
-                  <td className="px-5 py-2 font-mono text-xs text-slate-600">
+                  <td className="px-5 py-2 font-mono text-xs text-gray-700">
                     {e.reference}
                   </td>
-                  <td className="px-5 py-2 text-right text-green-600">
+                  <td className="px-5 py-2 text-right text-success">
                     {e.income ? money(e.income) : '—'}
                   </td>
-                  <td className="px-5 py-2 text-right text-red-600">
+                  <td className="px-5 py-2 text-right text-danger">
                     {e.expense ? money(e.expense) : '—'}
                   </td>
                 </tr>

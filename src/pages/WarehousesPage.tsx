@@ -51,7 +51,7 @@ export default function WarehousesPage() {
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-slate-800">Bodegas</h1>
+        <h1 className="text-2xl font-semibold text-gray-900">Bodegas</h1>
         {can('inventory.write') && (
           <Button
             onClick={() => {
@@ -72,7 +72,7 @@ export default function WarehousesPage() {
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-slate-100 text-left text-slate-400">
+              <tr className="border-b border-gray-300 text-left text-gray-500">
                 <th className="px-5 py-3 font-medium">Nombre</th>
                 <th className="px-5 py-3 font-medium">Ubicación</th>
                 <th className="px-5 py-3 font-medium">Tipo</th>
@@ -81,11 +81,11 @@ export default function WarehousesPage() {
             </thead>
             <tbody>
               {data.map((w) => (
-                <tr key={w.id} className="border-b border-slate-50">
-                  <td className="px-5 py-3 font-medium text-slate-700">
+                <tr key={w.id} className="border-b border-gray-100">
+                  <td className="px-5 py-3 font-medium text-gray-700">
                     {w.name}
                   </td>
-                  <td className="px-5 py-3 text-slate-500">
+                  <td className="px-5 py-3 text-gray-500">
                     {w.location || '—'}
                   </td>
                   <td className="px-5 py-3">
@@ -117,7 +117,7 @@ export default function WarehousesPage() {
         >
           <Input label="Nombre" {...register('name', { required: true })} />
           <Input label="Ubicación" {...register('location')} />
-          <label className="flex items-center gap-2 text-sm text-slate-600">
+          <label className="flex items-center gap-2 text-sm text-gray-700">
             <input type="checkbox" {...register('isQuality')} />
             Bodega de calidad
           </label>

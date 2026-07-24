@@ -10,8 +10,8 @@ import { useAuth } from '@/features/auth/AuthContext'
 function Stat({ label, value }: { label: string; value: number | string }) {
   return (
     <Card className="p-5">
-      <p className="text-sm text-slate-400">{label}</p>
-      <p className="mt-1 text-3xl font-semibold text-slate-800">{value}</p>
+      <p className="text-sm text-gray-500">{label}</p>
+      <p className="mt-1 text-3xl font-semibold text-gray-900">{value}</p>
     </Card>
   )
 }
@@ -36,10 +36,10 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <h1 className="mb-1 text-2xl font-semibold text-slate-800">
+      <h1 className="mb-1 text-2xl font-semibold text-gray-900">
         Hola, {user?.email}
       </h1>
-      <p className="mb-6 text-sm text-slate-400">
+      <p className="mb-6 text-sm text-gray-500">
         Resumen del sistema · rol {user?.role}
       </p>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">

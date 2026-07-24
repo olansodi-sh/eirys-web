@@ -148,7 +148,7 @@ export default function QuotesPage() {
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-slate-800">Cotizaciones</h1>
+        <h1 className="text-2xl font-semibold text-gray-900">Cotizaciones</h1>
         {can('quotes.write') && (
           <Button onClick={openCreate}>Nueva cotización</Button>
         )}
@@ -162,7 +162,7 @@ export default function QuotesPage() {
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-slate-100 text-left text-slate-400">
+              <tr className="border-b border-gray-300 text-left text-gray-500">
                 <th className="px-5 py-3 font-medium">Número</th>
                 <th className="px-5 py-3 font-medium">Cliente</th>
                 <th className="px-5 py-3 font-medium">Total</th>
@@ -172,14 +172,14 @@ export default function QuotesPage() {
             </thead>
             <tbody>
               {quotes.data.map((q) => (
-                <tr key={q.id} className="border-b border-slate-50">
-                  <td className="px-5 py-3 font-mono text-xs text-slate-600">
+                <tr key={q.id} className="border-b border-gray-100">
+                  <td className="px-5 py-3 font-mono text-xs text-gray-700">
                     {q.number}
                   </td>
-                  <td className="px-5 py-3 text-slate-500">
+                  <td className="px-5 py-3 text-gray-500">
                     {q.thirdParty?.name ?? '—'}
                   </td>
-                  <td className="px-5 py-3 font-medium text-slate-700">
+                  <td className="px-5 py-3 font-medium text-gray-700">
                     {money(q.total)}
                   </td>
                   <td className="px-5 py-3">
@@ -245,10 +245,10 @@ export default function QuotesPage() {
             </Select>
           </div>
 
-          <div className="rounded-lg border border-slate-200 p-3">
+          <div className="rounded-md border border-gray-300 p-3">
             <div className="grid grid-cols-[1fr_70px_90px_auto] items-end gap-2">
               <div>
-                <span className="mb-1 block text-sm font-medium text-slate-600">
+                <span className="mb-1 block text-sm font-medium text-gray-700">
                   Producto / SKU
                 </span>
                 <SearchableSelect
@@ -274,10 +274,10 @@ export default function QuotesPage() {
                 +
               </Button>
             </div>
-            <ul className="mt-3 divide-y divide-slate-100 text-sm">
+            <ul className="mt-3 divide-y divide-gray-100 text-sm">
               {lines.map((l, i) => (
                 <li key={i} className="flex justify-between py-1.5">
-                  <span className="text-slate-600">
+                  <span className="text-gray-700">
                     {l.label} × {l.quantity}
                   </span>
                   <span className="font-medium">
@@ -289,7 +289,7 @@ export default function QuotesPage() {
           </div>
 
           <div className="flex items-center justify-between">
-            <span className="text-slate-500">Total</span>
+            <span className="text-gray-500">Total</span>
             <span className="text-xl font-semibold">{money(total)}</span>
           </div>
 

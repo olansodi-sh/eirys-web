@@ -36,7 +36,7 @@ export default function VouchersPage() {
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-slate-800">Vales</h1>
+        <h1 className="text-2xl font-semibold text-gray-900">Vales</h1>
         <Button onClick={() => setOpen(true)}>Nuevo vale</Button>
       </div>
 
@@ -48,7 +48,7 @@ export default function VouchersPage() {
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-slate-100 text-left text-slate-400">
+              <tr className="border-b border-gray-300 text-left text-gray-500">
                 <th className="px-5 py-3 font-medium">Código</th>
                 <th className="px-5 py-3 font-medium">Monto</th>
                 <th className="px-5 py-3 font-medium">Saldo</th>
@@ -58,12 +58,12 @@ export default function VouchersPage() {
             </thead>
             <tbody>
               {vouchers.data.map((v) => (
-                <tr key={v.id} className="border-b border-slate-50">
-                  <td className="px-5 py-3 font-mono text-xs text-slate-600">
+                <tr key={v.id} className="border-b border-gray-100">
+                  <td className="px-5 py-3 font-mono text-xs text-gray-700">
                     {v.code}
                   </td>
-                  <td className="px-5 py-3 text-slate-500">{money(v.amount)}</td>
-                  <td className="px-5 py-3 font-medium text-slate-700">
+                  <td className="px-5 py-3 text-gray-500">{money(v.amount)}</td>
+                  <td className="px-5 py-3 font-medium text-gray-700">
                     {money(v.balance)}
                   </td>
                   <td className="px-5 py-3">

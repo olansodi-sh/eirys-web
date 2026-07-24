@@ -66,7 +66,7 @@ export function SimpleCatalogTab({
   return (
     <div>
       <div className="mb-4 flex items-center justify-between">
-        <span className="text-sm text-slate-500">
+        <span className="text-sm text-gray-500">
           {data?.length ?? 0} {label.toLowerCase()}(s)
         </span>
         {can('inventory.write') && (
@@ -87,10 +87,10 @@ export function SimpleCatalogTab({
         ) : !data?.length ? (
           <EmptyState message={`No hay ${label.toLowerCase()}s`} />
         ) : (
-          <ul className="divide-y divide-slate-50">
+          <ul className="divide-y divide-gray-100">
             {data.map((item) => (
               <li key={item.id} className="flex items-center justify-between px-5 py-3">
-                <span className="font-medium text-slate-700">{item.name}</span>
+                <span className="font-medium text-gray-700">{item.name}</span>
                 {can('inventory.write') && (
                   <RowActions
                     onEdit={() => {

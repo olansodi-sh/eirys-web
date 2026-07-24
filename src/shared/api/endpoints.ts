@@ -244,8 +244,15 @@ export interface SalePayload {
   payment?: { method: PaymentMethod; amount: number }
 }
 
+export interface SalesFilter {
+  search?: string
+  from?: string
+  to?: string
+}
+
 export const salesApi = {
-  list: () => api.get<Sale[]>('/sales').then((r) => r.data),
+  list: (params?: SalesFilter) =>
+    api.get<Sale[]>('/sales', { params }).then((r) => r.data),
   get: (id: string) => api.get<Sale>(`/sales/${id}`).then((r) => r.data),
   create: (dto: SalePayload) =>
     api.post<Sale>('/sales', dto).then((r) => r.data),

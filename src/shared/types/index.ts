@@ -160,6 +160,10 @@ export interface Sale {
   id: string
   number: string
   thirdParty?: ThirdParty | null
+  /** Nombre del cliente al momento de la venta (no cambia si el tercero se edita después). */
+  clientName: string | null
+  clientDocType: string | null
+  clientDocNumber: string | null
   total: string
   paidAmount: string
   status: SaleStatus

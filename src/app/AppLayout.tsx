@@ -34,12 +34,12 @@ export default function AppLayout() {
 
   return (
     <div className="flex min-h-screen">
-      <aside className="flex w-60 flex-col border-r border-slate-200 bg-white">
+      <aside className="flex w-60 flex-col border-r border-gray-300 bg-white">
         <div className="flex items-center gap-2 px-5 py-5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-violet-600 font-bold text-white">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary font-bold text-white">
             E
           </div>
-          <span className="text-lg font-semibold text-slate-800">Eirys</span>
+          <span className="text-lg font-semibold text-gray-900">Eirys</span>
         </div>
         <nav className="flex-1 space-y-1 px-3">
           {NAV.filter((i) => !i.permission || can(i.permission)).map((item) => (
@@ -48,10 +48,10 @@ export default function AppLayout() {
               to={item.to}
               end={item.to === '/'}
               className={({ isActive }) =>
-                `block rounded-lg px-3 py-2 text-sm font-medium transition ${
+                `block rounded-md px-3 py-2 text-sm font-medium transition ${
                   isActive
-                    ? 'bg-violet-50 text-violet-700'
-                    : 'text-slate-600 hover:bg-slate-100'
+                    ? 'bg-primary text-white'
+                    : 'text-gray-700 hover:bg-gray-100'
                 }`
               }
             >
@@ -59,12 +59,12 @@ export default function AppLayout() {
             </NavLink>
           ))}
         </nav>
-        <div className="border-t border-slate-100 p-4">
-          <p className="text-sm font-medium text-slate-700">{user?.email}</p>
-          <p className="mb-2 text-xs text-slate-400">{user?.role}</p>
+        <div className="border-t border-gray-300 p-4">
+          <p className="text-sm font-medium text-gray-900">{user?.email}</p>
+          <p className="mb-2 text-xs text-gray-500">{user?.role}</p>
           <button
             onClick={logout}
-            className="text-xs font-medium text-red-500 hover:underline"
+            className="text-xs font-medium text-danger hover:underline"
           >
             Cerrar sesión
           </button>

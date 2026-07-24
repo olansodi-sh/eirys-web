@@ -13,14 +13,14 @@ export function Button({
   variant?: 'primary' | 'secondary' | 'danger' | 'ghost'
 }) {
   const styles: Record<string, string> = {
-    primary: 'bg-violet-600 text-white hover:bg-violet-700',
-    secondary: 'bg-slate-100 text-slate-700 hover:bg-slate-200',
-    danger: 'bg-red-50 text-red-600 hover:bg-red-100',
-    ghost: 'text-slate-500 hover:bg-slate-100',
+    primary: 'bg-primary text-white hover:bg-primary-hover',
+    secondary: 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100',
+    danger: 'bg-white text-danger border border-danger hover:bg-danger-bg',
+    ghost: 'text-gray-500 hover:bg-gray-100',
   }
   return (
     <button
-      className={`inline-flex items-center justify-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium transition disabled:opacity-50 ${styles[variant]} ${className}`}
+      className={`inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition disabled:opacity-50 ${styles[variant]} ${className}`}
       {...props}
     />
   )
@@ -35,15 +35,15 @@ export function Input({
   return (
     <label className="block">
       {label && (
-        <span className="mb-1 block text-sm font-medium text-slate-600">
+        <span className="mb-1 block text-sm font-medium text-gray-700">
           {label}
         </span>
       )}
       <input
-        className={`w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-100 ${className}`}
+        className={`w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-primary ${className}`}
         {...props}
       />
-      {error && <span className="mt-1 block text-xs text-red-500">{error}</span>}
+      {error && <span className="mt-1 block text-xs text-danger">{error}</span>}
     </label>
   )
 }
@@ -57,12 +57,12 @@ export function Select({
   return (
     <label className="block">
       {label && (
-        <span className="mb-1 block text-sm font-medium text-slate-600">
+        <span className="mb-1 block text-sm font-medium text-gray-700">
           {label}
         </span>
       )}
       <select
-        className={`w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-100 ${className}`}
+        className={`w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-primary ${className}`}
         {...props}
       >
         {children}
@@ -80,7 +80,7 @@ export function Card({
 }) {
   return (
     <div
-      className={`rounded-xl border border-slate-200 bg-white shadow-sm ${className}`}
+      className={`rounded-lg border border-gray-300 bg-white shadow-sm ${className}`}
     >
       {children}
     </div>
@@ -109,13 +109,13 @@ export function Modal({
     '4xl': 'max-w-4xl',
   }
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4">
-      <div className={`w-full ${widths[size]} rounded-2xl bg-white shadow-xl`}>
-        <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
-          <h3 className="text-lg font-semibold text-slate-800">{title}</h3>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+      <div className={`w-full ${widths[size]} rounded-lg bg-white shadow-xl`}>
+        <div className="flex items-center justify-between border-b border-gray-300 px-5 py-4">
+          <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-600"
+            className="text-gray-500 hover:text-gray-700"
           >
             ✕
           </button>
@@ -128,7 +128,7 @@ export function Modal({
 
 export function Badge({ children }: { children: ReactNode }) {
   return (
-    <span className="inline-flex rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">
+    <span className="inline-flex rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-700">
       {children}
     </span>
   )
@@ -136,6 +136,6 @@ export function Badge({ children }: { children: ReactNode }) {
 
 export function EmptyState({ message }: { message: string }) {
   return (
-    <div className="py-12 text-center text-sm text-slate-400">{message}</div>
+    <div className="py-12 text-center text-sm text-gray-500">{message}</div>
   )
 }

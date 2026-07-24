@@ -113,7 +113,7 @@ export default function PriceListsPage() {
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-slate-800">
+        <h1 className="text-2xl font-semibold text-gray-900">
           Listas de precios
         </h1>
         <div className="flex gap-2">
@@ -135,10 +135,10 @@ export default function PriceListsPage() {
         {lists.data?.map((l) => (
           <div
             key={l.id}
-            className={`flex items-center gap-1 rounded-lg border px-2 py-1 text-sm font-medium ${
+            className={`flex items-center gap-1 rounded-md border px-2 py-1 text-sm font-medium ${
               selected === l.id
-                ? 'border-violet-400 bg-violet-50 text-violet-700'
-                : 'border-slate-200 text-slate-600'
+                ? 'border-primary bg-primary-light text-primary'
+                : 'border-gray-300 text-gray-700'
             }`}
           >
             <button onClick={() => setSelected(l.id)} className="px-1">
@@ -166,7 +166,7 @@ export default function PriceListsPage() {
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-slate-100 text-left text-slate-400">
+              <tr className="border-b border-gray-300 text-left text-gray-500">
                 <th className="px-5 py-3 font-medium">Producto</th>
                 <th className="px-5 py-3 font-medium">Variante</th>
                 <th className="px-5 py-3 font-medium">Precio</th>
@@ -175,9 +175,9 @@ export default function PriceListsPage() {
             <tbody>
               {products.data.flatMap((p) =>
                 p.variants.map((v) => (
-                  <tr key={v.id} className="border-b border-slate-50">
-                    <td className="px-5 py-2 text-slate-600">{p.name}</td>
-                    <td className="px-5 py-2 text-slate-500">
+                  <tr key={v.id} className="border-b border-gray-100">
+                    <td className="px-5 py-2 text-gray-700">{p.name}</td>
+                    <td className="px-5 py-2 text-gray-500">
                       {v.size} / {v.color}
                     </td>
                     <td className="px-5 py-2">
@@ -191,7 +191,7 @@ export default function PriceListsPage() {
                             [v.id]: Number(e.target.value),
                           }))
                         }
-                        className="w-32 rounded border border-slate-200 px-2 py-1 text-sm"
+                        className="w-32 rounded-md border border-gray-300 px-2 py-1 text-sm"
                       />
                     </td>
                   </tr>
@@ -217,10 +217,10 @@ export default function PriceListsPage() {
 
       {can('pricing.write') && (
         <Card className="mt-6 p-5">
-          <h2 className="mb-3 text-sm font-semibold text-slate-700">
+          <h2 className="mb-3 text-sm font-semibold text-gray-700">
             Importar desde Excel
           </h2>
-          <p className="mb-4 text-xs text-slate-400">
+          <p className="mb-4 text-xs text-gray-500">
             Descarga el Excel de productos, asigna un precio en la columna
             "Precio" y súbelo aquí para crear o actualizar una lista de
             precios.
@@ -251,7 +251,7 @@ export default function PriceListsPage() {
               onChange={(e) => setImportName(e.target.value)}
             />
             <label className="block">
-              <span className="mb-1 block text-sm font-medium text-slate-600">Archivo (.xlsx)</span>
+              <span className="mb-1 block text-sm font-medium text-gray-700">Archivo (.xlsx)</span>
               <input
                 ref={fileInputRef}
                 type="file"
@@ -277,7 +277,7 @@ export default function PriceListsPage() {
                   `${importResult.skipped.length} filas omitidas.`}
               </InlineAlert>
               {importResult.skipped.length > 0 && (
-                <ul className="mt-2 max-h-32 overflow-y-auto text-xs text-slate-500">
+                <ul className="mt-2 max-h-32 overflow-y-auto text-xs text-gray-500">
                   {importResult.skipped.map((s, i) => (
                     <li key={i}>
                       Fila {s.row} ({s.sku} {s.size}/{s.color}): {s.reason}
@@ -296,7 +296,7 @@ export default function PriceListsPage() {
           className="space-y-4"
         >
           <Input label="Nombre" {...register('name', { required: true })} />
-          <label className="flex items-center gap-2 text-sm text-slate-600">
+          <label className="flex items-center gap-2 text-sm text-gray-700">
             <input type="checkbox" {...register('consumidorFinal')} />
             Marcar como lista de consumidor final
           </label>

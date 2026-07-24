@@ -58,7 +58,7 @@ export default function RecurringPage() {
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-slate-800">
+        <h1 className="text-2xl font-semibold text-gray-900">
           Facturas recurrentes
         </h1>
         <div className="flex gap-2">
@@ -69,7 +69,7 @@ export default function RecurringPage() {
         </div>
       </div>
 
-      {msg && <p className="mb-4 text-sm text-violet-700">{msg}</p>}
+      {msg && <p className="mb-4 text-sm text-primary">{msg}</p>}
 
       <Card>
         {list.isLoading ? (
@@ -79,7 +79,7 @@ export default function RecurringPage() {
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-slate-100 text-left text-slate-400">
+              <tr className="border-b border-gray-300 text-left text-gray-500">
                 <th className="px-5 py-3 font-medium">Nombre</th>
                 <th className="px-5 py-3 font-medium">Frecuencia</th>
                 <th className="px-5 py-3 font-medium">Próxima ejecución</th>
@@ -88,14 +88,14 @@ export default function RecurringPage() {
             </thead>
             <tbody>
               {list.data.map((r) => (
-                <tr key={r.id} className="border-b border-slate-50">
-                  <td className="px-5 py-3 font-medium text-slate-700">
+                <tr key={r.id} className="border-b border-gray-100">
+                  <td className="px-5 py-3 font-medium text-gray-700">
                     {r.name}
                   </td>
-                  <td className="px-5 py-3 text-slate-500">
+                  <td className="px-5 py-3 text-gray-500">
                     {r.frequency === 'monthly' ? 'Mensual' : 'Semanal'}
                   </td>
-                  <td className="px-5 py-3 text-slate-500">{r.nextRun}</td>
+                  <td className="px-5 py-3 text-gray-500">{r.nextRun}</td>
                   <td className="px-5 py-3">
                     <Badge>{r.active ? 'Activa' : 'Inactiva'}</Badge>
                   </td>

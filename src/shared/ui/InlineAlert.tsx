@@ -9,10 +9,10 @@ export function InlineAlert({
 }) {
   const styles =
     kind === 'success'
-      ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-      : 'bg-red-50 text-red-700 border-red-200'
+      ? 'bg-success-bg text-success border-success/20'
+      : 'bg-danger-bg text-danger border-danger/20'
   return (
-    <div className={`rounded-lg border px-3 py-2 text-sm ${styles}`}>
+    <div className={`rounded-md border px-3 py-2 text-sm ${styles}`}>
       {children}
     </div>
   )

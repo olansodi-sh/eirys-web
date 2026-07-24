@@ -15,7 +15,7 @@ export default function CreditNotesPage() {
   const [generateVoucher, setGenerateVoucher] = useState(true)
 
   const notes = useQuery({ queryKey: ['credit-notes'], queryFn: creditNotesApi.list })
-  const sales = useQuery({ queryKey: ['sales'], queryFn: salesApi.list })
+  const sales = useQuery({ queryKey: ['sales'], queryFn: () => salesApi.list() })
 
   const create = useMutation({
     mutationFn: () =>
@@ -39,7 +39,7 @@ export default function CreditNotesPage() {
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-slate-800">Notas crédito</h1>
+        <h1 className="text-2xl font-semibold text-gray-900">Notas crédito</h1>
         <Button onClick={() => setOpen(true)}>Nueva nota crédito</Button>
       </div>
 
@@ -51,7 +51,7 @@ export default function CreditNotesPage() {
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-slate-100 text-left text-slate-400">
+              <tr className="border-b border-gray-300 text-left text-gray-500">
                 <th className="px-5 py-3 font-medium">Número</th>
                 <th className="px-5 py-3 font-medium">Tipo</th>
                 <th className="px-5 py-3 font-medium">Monto</th>
@@ -60,17 +60,17 @@ export default function CreditNotesPage() {
             </thead>
             <tbody>
               {notes.data.map((n) => (
-                <tr key={n.id} className="border-b border-slate-50">
-                  <td className="px-5 py-3 font-mono text-xs text-slate-600">
+                <tr key={n.id} className="border-b border-gray-100">
+                  <td className="px-5 py-3 font-mono text-xs text-gray-700">
                     {n.number}
                   </td>
                   <td className="px-5 py-3">
                     <Badge>{n.type === 'total' ? 'Total' : 'Parcial'}</Badge>
                   </td>
-                  <td className="px-5 py-3 font-medium text-slate-700">
+                  <td className="px-5 py-3 font-medium text-gray-700">
                     {money(n.amount)}
                   </td>
-                  <td className="px-5 py-3 text-slate-500">
+                  <td className="px-5 py-3 text-gray-500">
                     {n.voucherId ? 'Sí' : '—'}
                   </td>
                 </tr>
@@ -119,7 +119,7 @@ export default function CreditNotesPage() {
             value={reason}
             onChange={(e) => setReason(e.target.value)}
           />
-          <label className="flex items-center gap-2 text-sm text-slate-600">
+          <label className="flex items-center gap-2 text-sm text-gray-700">
             <input
               type="checkbox"
               checked={restock}
@@ -127,7 +127,7 @@ export default function CreditNotesPage() {
             />
             Devolver unidades al inventario (solo total)
           </label>
-          <label className="flex items-center gap-2 text-sm text-slate-600">
+          <label className="flex items-center gap-2 text-sm text-gray-700">
             <input
               type="checkbox"
               checked={generateVoucher}

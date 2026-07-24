@@ -54,7 +54,7 @@ export default function ProductsPage() {
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-slate-800">Productos</h1>
+        <h1 className="text-2xl font-semibold text-gray-900">Productos</h1>
         <div className="flex gap-2">
           <Button variant="secondary" onClick={() => exportExcel.mutate()} disabled={exportExcel.isPending}>
             Descargar Excel
@@ -88,7 +88,7 @@ export default function ProductsPage() {
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-slate-100 text-left text-slate-400">
+              <tr className="border-b border-gray-300 text-left text-gray-500">
                 <th className="px-5 py-3 font-medium">SKU</th>
                 <th className="px-5 py-3 font-medium">Nombre</th>
                 <th className="px-5 py-3 font-medium">Marca</th>
@@ -99,15 +99,15 @@ export default function ProductsPage() {
             </thead>
             <tbody>
               {data.map((p) => (
-                <tr key={p.id} className="border-b border-slate-50">
-                  <td className="px-5 py-3 font-mono text-xs text-slate-500">
+                <tr key={p.id} className="border-b border-gray-100">
+                  <td className="px-5 py-3 font-mono text-xs text-gray-500">
                     {p.sku}
                   </td>
-                  <td className="px-5 py-3 font-medium text-slate-700">
+                  <td className="px-5 py-3 font-medium text-gray-700">
                     {p.name}
                   </td>
-                  <td className="px-5 py-3 text-slate-500">{p.brand?.name || '—'}</td>
-                  <td className="px-5 py-3 text-slate-500">{p.material?.name || '—'}</td>
+                  <td className="px-5 py-3 text-gray-500">{p.brand?.name || '—'}</td>
+                  <td className="px-5 py-3 text-gray-500">{p.material?.name || '—'}</td>
                   <td className="px-5 py-3">
                     <div className="flex flex-wrap gap-1">
                       {p.variants?.length ? (
@@ -117,7 +117,7 @@ export default function ProductsPage() {
                           </Badge>
                         ))
                       ) : (
-                        <span className="text-slate-400">—</span>
+                        <span className="text-gray-500">—</span>
                       )}
                     </div>
                   </td>
@@ -142,10 +142,10 @@ export default function ProductsPage() {
 
       {can('inventory.write') && (
         <Card className="mt-6 p-5">
-          <h2 className="mb-3 text-sm font-semibold text-slate-700">
+          <h2 className="mb-3 text-sm font-semibold text-gray-700">
             Cargue masivo desde Excel
           </h2>
-          <p className="mb-4 text-xs text-slate-400">
+          <p className="mb-4 text-xs text-gray-500">
             Descarga el Excel de productos, complétalo (agrega filas nuevas
             con SKU nuevo para crear productos, o edita filas existentes para
             actualizarlos) y súbelo aquí. Categoría, Marca y Material se
@@ -155,7 +155,7 @@ export default function ProductsPage() {
           </p>
           <div className="flex items-end gap-3">
             <label className="block flex-1">
-              <span className="mb-1 block text-sm font-medium text-slate-600">Archivo (.xlsx)</span>
+              <span className="mb-1 block text-sm font-medium text-gray-700">Archivo (.xlsx)</span>
               <input
                 ref={fileInputRef}
                 type="file"
@@ -179,7 +179,7 @@ export default function ProductsPage() {
                   `${importResult.skipped.length} filas omitidas.`}
               </InlineAlert>
               {importResult.skipped.length > 0 && (
-                <ul className="mt-2 max-h-32 overflow-y-auto text-xs text-slate-500">
+                <ul className="mt-2 max-h-32 overflow-y-auto text-xs text-gray-500">
                   {importResult.skipped.map((s, i) => (
                     <li key={i}>
                       Fila {s.row} ({s.sku}): {s.reason}

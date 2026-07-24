@@ -6,8 +6,8 @@ import { money } from '@/shared/utils/format'
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <Card className="p-5">
-      <p className="text-sm text-slate-400">{label}</p>
-      <p className="mt-1 text-2xl font-semibold text-slate-800">{value}</p>
+      <p className="text-sm text-gray-500">{label}</p>
+      <p className="mt-1 text-2xl font-semibold text-gray-900">{value}</p>
     </Card>
   )
 }
@@ -21,7 +21,7 @@ function Panel({
 }) {
   return (
     <Card className="p-5">
-      <h2 className="mb-3 font-semibold text-slate-800">{title}</h2>
+      <h2 className="mb-3 font-semibold text-gray-900">{title}</h2>
       {children}
     </Card>
   )
@@ -48,10 +48,10 @@ export default function ReportsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold text-slate-800">Reportes</h1>
+      <h1 className="text-2xl font-semibold text-gray-900">Reportes</h1>
 
       <section>
-        <h2 className="mb-3 text-sm font-medium text-slate-500">
+        <h2 className="mb-3 text-sm font-medium text-gray-500">
           Reporte del día
         </h2>
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
@@ -74,12 +74,12 @@ export default function ReportsPage() {
               <tbody>
                 {c360.data.topProducts.map(
                   (p: { name: string; units: number; total: number }) => (
-                    <tr key={p.name} className="border-b border-slate-50">
-                      <td className="py-2 text-slate-600">{p.name}</td>
-                      <td className="py-2 text-right text-slate-400">
+                    <tr key={p.name} className="border-b border-gray-100">
+                      <td className="py-2 text-gray-700">{p.name}</td>
+                      <td className="py-2 text-right text-gray-500">
                         {p.units} u
                       </td>
-                      <td className="py-2 text-right font-medium text-slate-700">
+                      <td className="py-2 text-right font-medium text-gray-700">
                         {money(p.total)}
                       </td>
                     </tr>
@@ -98,12 +98,12 @@ export default function ReportsPage() {
               <tbody>
                 {c360.data.topClients.map(
                   (c: { name: string; orders: number; total: number }) => (
-                    <tr key={c.name} className="border-b border-slate-50">
-                      <td className="py-2 text-slate-600">{c.name}</td>
-                      <td className="py-2 text-right text-slate-400">
+                    <tr key={c.name} className="border-b border-gray-100">
+                      <td className="py-2 text-gray-700">{c.name}</td>
+                      <td className="py-2 text-right text-gray-500">
                         {c.orders} ventas
                       </td>
-                      <td className="py-2 text-right font-medium text-slate-700">
+                      <td className="py-2 text-right font-medium text-gray-700">
                         {money(c.total)}
                       </td>
                     </tr>
@@ -122,12 +122,12 @@ export default function ReportsPage() {
               <tbody>
                 {byProduct.data.map(
                   (r: { name: string; units: number; value: number }) => (
-                    <tr key={r.name} className="border-b border-slate-50">
-                      <td className="py-2 text-slate-600">{r.name}</td>
-                      <td className="py-2 text-right text-slate-400">
+                    <tr key={r.name} className="border-b border-gray-100">
+                      <td className="py-2 text-gray-700">{r.name}</td>
+                      <td className="py-2 text-right text-gray-500">
                         {r.units} u
                       </td>
-                      <td className="py-2 text-right font-medium text-slate-700">
+                      <td className="py-2 text-right font-medium text-gray-700">
                         {money(r.value)}
                       </td>
                     </tr>
@@ -145,9 +145,9 @@ export default function ReportsPage() {
             <table className="w-full text-sm">
               <tbody>
                 {byWarehouse.data.map((r: { name: string; value: number }) => (
-                  <tr key={r.name} className="border-b border-slate-50">
-                    <td className="py-2 text-slate-600">{r.name}</td>
-                    <td className="py-2 text-right font-medium text-slate-700">
+                  <tr key={r.name} className="border-b border-gray-100">
+                    <td className="py-2 text-gray-700">{r.name}</td>
+                    <td className="py-2 text-right font-medium text-gray-700">
                       {money(r.value)}
                     </td>
                   </tr>

@@ -49,7 +49,7 @@ export default function TasksPage() {
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-semibold text-slate-800">Mis tareas</h1>
+      <h1 className="mb-6 text-2xl font-semibold text-gray-900">Mis tareas</h1>
 
       <div className="flex gap-4 overflow-x-auto pb-4">
         {board.data?.map((col) => (
@@ -57,16 +57,16 @@ export default function TasksPage() {
             key={col.id}
             onDragOver={(e) => e.preventDefault()}
             onDrop={() => onDrop(col)}
-            className="flex w-72 flex-shrink-0 flex-col rounded-xl bg-slate-100 p-3"
+            className="flex w-72 flex-shrink-0 flex-col rounded-lg bg-gray-100 p-3"
           >
             <div className="mb-3 flex items-center justify-between px-1">
-              <h2 className="text-sm font-semibold text-slate-700">
+              <h2 className="text-sm font-semibold text-gray-700">
                 {col.name}
-                <span className="ml-2 text-slate-400">{col.tasks.length}</span>
+                <span className="ml-2 text-gray-500">{col.tasks.length}</span>
               </h2>
               <button
                 onClick={() => openFor(col.id)}
-                className="text-slate-400 hover:text-violet-600"
+                className="text-gray-500 hover:text-primary"
                 title="Agregar tarea"
               >
                 +
@@ -78,28 +78,28 @@ export default function TasksPage() {
                   key={t.id}
                   draggable
                   onDragStart={() => setDragId(t.id)}
-                  className="group cursor-grab rounded-lg border border-slate-200 bg-white p-3 shadow-sm active:cursor-grabbing"
+                  className="group cursor-grab rounded-md border border-gray-300 bg-white p-3 shadow-sm active:cursor-grabbing"
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <p className="text-sm font-medium text-slate-700">
+                    <p className="text-sm font-medium text-gray-700">
                       {t.title}
                     </p>
                     <button
                       onClick={() => remove.mutate(t.id)}
-                      className="text-slate-300 opacity-0 transition group-hover:opacity-100 hover:text-red-500"
+                      className="text-gray-300 opacity-0 transition group-hover:opacity-100 hover:text-danger"
                     >
                       ✕
                     </button>
                   </div>
                   {t.description && (
-                    <p className="mt-1 text-xs text-slate-400">
+                    <p className="mt-1 text-xs text-gray-500">
                       {t.description}
                     </p>
                   )}
                 </div>
               ))}
               {col.tasks.length === 0 && (
-                <p className="px-1 py-4 text-center text-xs text-slate-400">
+                <p className="px-1 py-4 text-center text-xs text-gray-500">
                   Arrastra tarjetas aquí
                 </p>
               )}

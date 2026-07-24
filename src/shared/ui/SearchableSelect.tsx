@@ -45,7 +45,7 @@ export function SearchableSelect({
   return (
     <div className="relative" ref={rootRef}>
       <input
-        className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
+        className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-primary"
         placeholder={placeholder}
         value={isOpen ? query : (selected?.label ?? '')}
         onFocus={() => {
@@ -58,15 +58,15 @@ export function SearchableSelect({
         }}
       />
       {isOpen && (
-        <div className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-lg border border-slate-200 bg-white shadow-lg">
+        <div className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md border border-gray-300 bg-white shadow-lg">
           {filtered.length === 0 && (
-            <div className="px-3 py-2 text-sm text-slate-400">Sin resultados</div>
+            <div className="px-3 py-2 text-sm text-gray-500">Sin resultados</div>
           )}
           {filtered.map((o) => (
             <button
               key={o.id}
               type="button"
-              className="block w-full px-3 py-2 text-left text-sm hover:bg-violet-50"
+              className="block w-full px-3 py-2 text-left text-sm hover:bg-primary-light"
               onClick={() => {
                 onChange(o.id)
                 setIsOpen(false)
@@ -75,7 +75,7 @@ export function SearchableSelect({
             >
               {o.label}
               {o.sublabel && (
-                <span className="ml-1 text-xs text-slate-400">{o.sublabel}</span>
+                <span className="ml-1 text-xs text-gray-500">{o.sublabel}</span>
               )}
             </button>
           ))}

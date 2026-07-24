@@ -50,7 +50,7 @@ export default function DispatchPage() {
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-slate-800">Despacho</h1>
+        <h1 className="text-2xl font-semibold text-gray-900">Despacho</h1>
         {can('dispatch.write') && (
           <Button onClick={() => setOpen(true)}>Nuevo despacho</Button>
         )}
@@ -64,7 +64,7 @@ export default function DispatchPage() {
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-slate-100 text-left text-slate-400">
+              <tr className="border-b border-gray-300 text-left text-gray-500">
                 <th className="px-5 py-3 font-medium">Número</th>
                 <th className="px-5 py-3 font-medium">Tipo</th>
                 <th className="px-5 py-3 font-medium">Referencia</th>
@@ -75,17 +75,17 @@ export default function DispatchPage() {
             </thead>
             <tbody>
               {list.data.map((d) => (
-                <tr key={d.id} className="border-b border-slate-50">
-                  <td className="px-5 py-3 font-mono text-xs text-slate-600">
+                <tr key={d.id} className="border-b border-gray-100">
+                  <td className="px-5 py-3 font-mono text-xs text-gray-700">
                     {d.number}
                   </td>
                   <td className="px-5 py-3">
                     <Badge>{d.type === 'out' ? 'Salida' : 'Entrada'}</Badge>
                   </td>
-                  <td className="px-5 py-3 text-slate-500">
+                  <td className="px-5 py-3 text-gray-500">
                     {d.reference || '—'}
                   </td>
-                  <td className="px-5 py-3 text-slate-500">{d.lines.length}</td>
+                  <td className="px-5 py-3 text-gray-500">{d.lines.length}</td>
                   <td className="px-5 py-3">
                     <Badge>
                       {d.status === 'pending' ? 'Pendiente' : 'Completado'}

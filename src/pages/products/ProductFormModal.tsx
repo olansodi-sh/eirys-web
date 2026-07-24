@@ -44,7 +44,7 @@ function VariantFinalPrice({ control, index }: { control: Control<FormValues>; i
       type="text"
       readOnly
       value={price.toFixed(2)}
-      className="cursor-not-allowed bg-slate-50 text-slate-500"
+      className="cursor-not-allowed bg-gray-100 text-gray-500"
     />
   )
 }
@@ -163,9 +163,9 @@ export function ProductFormModal({
         </div>
 
         <label className="block">
-          <span className="mb-1 block text-sm font-medium text-slate-600">Descripción</span>
+          <span className="mb-1 block text-sm font-medium text-gray-700">Descripción</span>
           <textarea
-            className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
+            className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-primary"
             rows={3}
             placeholder="Descripción para mostrar en el ecommerce…"
             {...register('description')}
@@ -173,9 +173,9 @@ export function ProductFormModal({
         </label>
 
         <label className="block">
-          <span className="mb-1 block text-sm font-medium text-slate-600">Cuidados</span>
+          <span className="mb-1 block text-sm font-medium text-gray-700">Cuidados</span>
           <textarea
-            className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
+            className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-primary"
             rows={2}
             placeholder="Instrucciones de cuidado del producto…"
             {...register('cuidados')}
@@ -212,7 +212,7 @@ export function ProductFormModal({
 
         <div>
           <div className="mb-2 flex items-center justify-between">
-            <span className="text-sm font-medium text-slate-600">
+            <span className="text-sm font-medium text-gray-700">
               Características (ficha técnica)
             </span>
             <Button
@@ -246,7 +246,7 @@ export function ProductFormModal({
 
         <div>
           <div className="mb-2 flex items-center justify-between">
-            <span className="text-sm font-medium text-slate-600">
+            <span className="text-sm font-medium text-gray-700">
               Variantes (talla / color)
             </span>
             <Button
@@ -257,7 +257,7 @@ export function ProductFormModal({
               + Agregar
             </Button>
           </div>
-          <p className="mb-2 text-xs text-slate-400">
+          <p className="mb-2 text-xs text-gray-500">
             El "Precio" se calcula automáticamente (Precio sin descuento − % Descuento) y se
             guarda como el precio de la variante en la lista "Consumidor final".
           </p>
@@ -309,22 +309,22 @@ export function ProductFormModal({
 
         <div>
           <div className="mb-2 flex items-center justify-between">
-            <span className="text-sm font-medium text-slate-600">Imágenes por variante</span>
+            <span className="text-sm font-medium text-gray-700">Imágenes por variante</span>
           </div>
           {!isEdit && (
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-gray-500">
               Guarda el producto primero; luego podrás subir imágenes para cada variante.
             </p>
           )}
           {isEdit && product && (
             <div className="space-y-3">
               {product.variants.length === 0 ? (
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-gray-500">
                   Agrega y guarda al menos una variante para poder subirle imágenes.
                 </p>
               ) : (
                 product.variants.map((v) => (
-                  <div key={v.id} className="rounded-lg border border-slate-200 p-3">
+                  <div key={v.id} className="rounded-md border border-gray-300 p-3">
                     <ProductImageGallery
                       productId={product.id}
                       variantId={v.id}

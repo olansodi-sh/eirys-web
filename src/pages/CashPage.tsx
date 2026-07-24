@@ -45,11 +45,11 @@ export default function CashPage() {
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-semibold text-slate-800">Caja</h1>
+      <h1 className="mb-6 text-2xl font-semibold text-gray-900">Caja</h1>
 
       {!session ? (
         <Card className="max-w-md p-6">
-          <p className="mb-4 text-sm text-slate-500">
+          <p className="mb-4 text-sm text-gray-500">
             No hay una sesión de caja abierta.
           </p>
           <Input
@@ -66,22 +66,22 @@ export default function CashPage() {
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           <Card className="p-6">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="font-semibold text-slate-800">Sesión abierta</h2>
+              <h2 className="font-semibold text-gray-900">Sesión abierta</h2>
               <Badge>Abierta</Badge>
             </div>
             <dl className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <dt className="text-slate-500">Fondo inicial</dt>
+                <dt className="text-gray-500">Fondo inicial</dt>
                 <dd className="font-medium">{money(session.openingAmount)}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-slate-500">Apertura</dt>
+                <dt className="text-gray-500">Apertura</dt>
                 <dd>{new Date(session.openedAt).toLocaleString('es-CO')}</dd>
               </div>
             </dl>
 
-            <div className="mt-6 border-t border-slate-100 pt-4">
-              <h3 className="mb-2 text-sm font-medium text-slate-600">
+            <div className="mt-6 border-t border-gray-100 pt-4">
+              <h3 className="mb-2 text-sm font-medium text-gray-700">
                 Registrar egreso
               </h3>
               <div className="flex items-end gap-2">
@@ -102,8 +102,8 @@ export default function CashPage() {
               </div>
             </div>
 
-            <div className="mt-6 border-t border-slate-100 pt-4">
-              <h3 className="mb-2 text-sm font-medium text-slate-600">
+            <div className="mt-6 border-t border-gray-100 pt-4">
+              <h3 className="mb-2 text-sm font-medium text-gray-700">
                 Cerrar caja (arqueo)
               </h3>
               <div className="flex items-end gap-2">
@@ -118,13 +118,13 @@ export default function CashPage() {
                 </Button>
               </div>
               {close.data && (
-                <p className="mt-2 text-sm text-slate-600">
+                <p className="mt-2 text-sm text-gray-700">
                   Esperado {money(close.data.expectedAmount ?? 0)} · Diferencia{' '}
                   <span
                     className={
                       Number(close.data.difference) === 0
-                        ? 'text-green-600'
-                        : 'text-red-600'
+                        ? 'text-success'
+                        : 'text-danger'
                     }
                   >
                     {money(close.data.difference ?? 0)}
@@ -135,15 +135,15 @@ export default function CashPage() {
           </Card>
 
           <Card className="p-6">
-            <h2 className="mb-3 font-semibold text-slate-800">Movimientos</h2>
-            <ul className="divide-y divide-slate-100 text-sm">
+            <h2 className="mb-3 font-semibold text-gray-900">Movimientos</h2>
+            <ul className="divide-y divide-gray-100 text-sm">
               {(movements.data as CashMovement[] | undefined)?.length ? (
                 (movements.data as CashMovement[]).map((m) => (
                   <li key={m.id} className="flex justify-between py-2">
-                    <span className="text-slate-600">{m.concept}</span>
+                    <span className="text-gray-700">{m.concept}</span>
                     <span
                       className={
-                        m.type === 'in' ? 'text-green-600' : 'text-red-600'
+                        m.type === 'in' ? 'text-success' : 'text-danger'
                       }
                     >
                       {m.type === 'in' ? '+' : '−'}
@@ -152,7 +152,7 @@ export default function CashPage() {
                   </li>
                 ))
               ) : (
-                <li className="py-6 text-center text-slate-400">
+                <li className="py-6 text-center text-gray-500">
                   Sin movimientos
                 </li>
               )}
